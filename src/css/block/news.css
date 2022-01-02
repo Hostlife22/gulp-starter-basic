@@ -1,0 +1,15 @@
+.news {
+	color: #fff;
+	list-style-type: none;
+	display: flex;
+	max-width: 500px;
+	justify-content: space-between;
+	margin: 0 auto;
+	text-shadow: 5px 5px #4d4644;
+}
+
+@media (max-width: 700px) {
+	.news {
+		display: block;
+	}
+}

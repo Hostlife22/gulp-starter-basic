@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Works with styles",
+    "body": "img/template.png"
+  },
+  {
+    "name": "Works with scripts and modules",
+    "body": "img/js.png"
+  },
+  {
+    "name": "Works with html and html preprocessor",
+    "body": "img/html-pug.png"
+  },
+  {
+    "name": "Minimizes images, creates svg sprites, favicon, fonts",
+    "body": "img/full.png"
+  }
+]
