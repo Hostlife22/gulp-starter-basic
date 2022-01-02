@@ -6,7 +6,7 @@
   "scripts": {
     "start": "gulp",
     "build": "gulp --production",
-    "svgSprite": "gulp svgSprite"
+    "svgSprite": "gulp svgSprive"
   },
   "browserslist": [
     "last 3 versions"
@@ -21,9 +21,15 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.16.5",
+    "@babel/eslint-parser": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
     "browser-sync": "^2.27.7",
     "del": "^6.0.0",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-prettier": "^4.0.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
@@ -54,6 +60,7 @@
     "gulp-webp": "^4.0.1",
     "gulp-webp-css": "^1.1.0",
     "gulp-webp-html": "^1.0.2",
+    "prettier": "^2.5.1",
     "require-dir": "^1.2.0",
     "sass": "^1.45.1",
     "webpack": "^5.65.0",
