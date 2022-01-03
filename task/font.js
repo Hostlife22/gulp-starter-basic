@@ -32,13 +32,13 @@ const font = () =>
     .pipe(dest(path.font.dest));
 
 // Подключение Font
-const fontsStyle = () => {
-  const fontsFile = `${path.folder}/sass/font/fonts.scss`;
+const fontStyle = (pathFolder) => {
+  const fontsFile = `${pathFolder}`;
 
   fs.readdir(path.font.dest, (err, fontsFiles) => {
     if (fs.existsSync(fontsFile)) {
       console.log(
-        'Файл scss/fonts.scss уже существует. Для обнонвления файла нужно удалить его'
+        `Файл ${pathFolder} уже существует. Для обнонвления файла нужно удалить его`
       );
       return;
     }
@@ -49,40 +49,40 @@ const fontsStyle = () => {
 
     for (let i = 0; i < fontsFiles.length; i++) {
       const fontFileName = fontsFiles[i].split('.')[0];
+      const nameFontStyle = fontFileName.toLowerCase();
 
       if (newFileOnly !== fontFileName) {
-        const weight = [
-          { fontWeight: ['thin', 100] },
-          { fontWeight: ['extralight', 200] },
-          { fontWeight: ['light', 300] },
-          { fontWeight: ['regular', 400] },
-          { fontWeight: ['medium', 500] },
-          { fontWeight: ['semibold', 600] },
-          { fontWeight: ['bold', 700] },
-          { fontWeight: ['extrabold', 800] },
-          { fontWeight: ['heavy', 800] },
-          { fontWeight: ['black', 900] },
+        const fontWeightArray = [
+          { thin: 100 },
+          { extralight: 200 },
+          { light: 300 },
+          { regular: 400 },
+          { medium: 500 },
+          { semibold: 600 },
+          { bold: 700 },
+          { extrabold: 800 },
+          { heavy: 800 },
+          { black: 900 },
         ];
 
-        const isFontWeigth = weight.find(({ fontWeight }) =>
-          fontFileName.toLowerCase().includes(fontWeight[0])
+        const isFontWeigth = fontWeightArray.find((obj) =>
+          nameFontStyle.includes(Object.keys(obj)[0])
         );
 
-        const fontName = weight
-          .map(({ fontWeight }) => fontWeight[0])
+        const fontName = fontWeightArray
+          .map((obj) => Object.keys(obj)[0])
           .concat('italic')
           .map((el) => {
-            const index = fontFileName.toLowerCase().indexOf(el);
-            return index === -1
-              ? fontFileName.toLowerCase()
-              : fontFileName.toLowerCase().slice(0, index);
+            const index = nameFontStyle.indexOf(el);
+            return index === -1 ? nameFontStyle : nameFontStyle.slice(0, index);
           })
-          .reduce((a, c) => (c.length < a.length ? c : a))
+          .reduce((acc, word) => (word.length < acc.length ? word : acc))
           .replace(/[^\w\s]/g, '');
 
         const fontWeight =
-          isFontWeigth === undefined ? 400 : isFontWeigth.fontWeight[1];
-        const fontStyle = fontFileName.toLowerCase().includes('italic')
+          isFontWeigth === undefined ? 400 : Object.values(isFontWeigth)[0];
+
+        const fontStyles = nameFontStyle.includes('italic')
           ? 'italic'
           : 'normal';
 
@@ -90,7 +90,7 @@ const fontsStyle = () => {
           fontsFile,
           `@font-face {\n\tfont-family: "${
             fontName.charAt(0).toUpperCase() + fontName.slice(1)
-          }";\n\tfont-display: swap;\n\tsrc: url("../font/${fontFileName}.woff2") format("woff2"), url("../font/${fontFileName}.woff") format("woff");\n\tfont-weight: ${fontWeight};\n\tfont-style: ${fontStyle};\n}\r\n`,
+          }";\n\tfont-display: swap;\n\tsrc: url("../font/${fontFileName}.woff2") format("woff2"), url("../font/${fontFileName}.woff") format("woff");\n\tfont-weight: ${fontWeight};\n\tfont-style: ${fontStyles};\n}\r\n`,
           cb
         );
 
@@ -103,4 +103,4 @@ const fontsStyle = () => {
   function cb() {}
 };
 
-module.exports = { font, fontsStyle };
+module.exports = { font, fontStyle };

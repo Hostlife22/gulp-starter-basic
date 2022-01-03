@@ -21,12 +21,14 @@ module.exports = {
     src: pathSrc + '/css/*.css',
     watch: pathSrc + '/css/**/*.css',
     dest: pathDest + '/css',
+    includingFonts: pathSrc + '/css/font/fonts.css',
   },
 
   scss: {
     src: pathSrc + '/sass/*.{sass,scss}',
     watch: pathSrc + '/sass/**/*.{sass,scss}',
     dest: pathDest + '/css',
+    includingFonts: pathSrc + '/sass/font/fonts.scss',
   },
 
   js: {
