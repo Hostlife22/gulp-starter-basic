@@ -6,7 +6,9 @@
   "scripts": {
     "start": "gulp",
     "build": "gulp --production",
-    "svgSprite": "gulp svgSprive"
+    "svgSprite": "gulp svgSprive",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "browserslist": [
     "last 3 versions"
