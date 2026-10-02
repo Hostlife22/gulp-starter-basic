@@ -7,7 +7,7 @@ Date: 2 October 2026. Local environment: macOS x64, Intel Core i7-9750H @ 2.60 G
 | Check                        | Result                                                                                                                               |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `npm run check`              | Passed: Prettier, ESLint, strict TypeScript, unit tests, production build                                                            |
-| Vitest                       | 36 passing tests                                                                                                                     |
+| Vitest                       | 38 passing tests                                                                                                                     |
 | `npm run test:e2e`           | 8 passing browser scenarios, explicitly invoked                                                                                      |
 | Real playback                | Recorded a complete showing; the slider reached 52.017 s without seek                                                                |
 | Reference frames             | Captured 49 moments: intro, twenty style controls, additional patch hold, six boundaries in three phases, reassembly, final and fade |
@@ -32,7 +32,7 @@ Functional checks pass, but visual equivalence does not. The figure proportions,
 
 ## Performance
 
-The final gallery was measured for approximately three seconds during live playback, with all twenty figures moving, at 1280×720 and DPR 1. The final sample contains 141 frames, mean interval **21.36 ms** (about **46.8 fps**) and p95 **33.4 ms**. [Raw measurements](review/performance.json).
+The final gallery was measured for approximately three seconds during live playback, with all twenty figures moving, at 1280×720 and DPR 1. The final sample contains 121 frames, mean interval **24.82 ms** (about **40.3 fps**) and p95 **33.4 ms**. [Raw measurements](review/performance.json).
 
 This is a local **headless Chromium** result. GPU acceleration was not independently established; it is not a measurement of a hardware-accelerated interactive browser or of the GitHub Linux runner. Stable 60 fps is not claimed. Dense procedural figure rendering remains a performance improvement area.
 
@@ -40,7 +40,7 @@ A separate CDP check exercises repeated seeks, viewport changes and replay, coll
 
 ## Production output
 
-Vite builds a static `/moonwalk-art-gallery/` site. JavaScript is approximately 253 kB before gzip, 84 kB compressed; CSS is approximately 6 kB. Fonts and licenses are local. Source MP4s, reference images and review artifacts are outside `public` and are not included in `dist`. No API or runtime CDN is used.
+Vite builds a static `/moonwalk-art-gallery/` site. JavaScript is approximately 258 kB before gzip, 85 kB compressed; CSS is approximately 6 kB. Fonts and licenses are local. Source MP4s, reference images and review artifacts are outside `public` and are not included in `dist`. No API or runtime CDN is used.
 
 ## Publication
 
@@ -63,3 +63,5 @@ Five unit tests cover default-on audio, blocked autoplay recovery, user activati
 Autoplay checks exercise both browser policies: permitted audible autoplay and blocked autoplay followed by a gesture. The blocked case injects a NotAllowedError until a trusted browser gesture because headless Chromium can bypass its autoplay policy; subsequent playback uses the actual audio decoder. Both checks verify that later gestures respect deliberate mute.
 
 The blocked-autoplay scenario also reloads the page and verifies that the control shows “Sound start” with aria-pressed=false, one press starts actual audio, and “Sound on” appears after playback begins.
+
+The dancer revision was checked across the full timeline at 60 samples per second for projected bone lengths and floor contact, plus dense continuity checks for hands, knees, ankles and head. All twenty reference captures and the complete playback recording were regenerated.

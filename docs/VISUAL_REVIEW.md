@@ -2,9 +2,15 @@
 
 Reviewed on 2 October 2026 against the provided 1280×720 video and its local contact sheets. This is a working procedural interpretation. **It is not a frame-exact copy, and the prompt's strict visual fidelity criterion is not yet satisfied.**
 
+## Dancer revision
+
+[Video → previous dancer → revised dancer](review/dancer-comparison.jpg) compares the silhouette, letterpress suit, red jacket and embroidered patch at the same timestamps. The revised rig has separate shoulder and hip joints, rounded sleeves and trouser contours, a wider jacket, curly hair, a shaped fedora, white socks and rounded shoes. The red jacket has a dark shirt and V trim; the manuscript jacket uses gold dots.
+
+Eight foot-contact poses and reference phase anchors replace the old five-pose loop. Arms follow a separate gesture track; projected inverse kinematics controls elbows and knees. Heel rise, foot pickup, body dip and head inclination are independently represented. These are hand-interpreted controls, not motion capture.
+
 ## Incoming-card correction
 
-Removed the overlay that copied the previous background onto each incoming card before revealing its own art. All nineteen transitions now show the incoming card’s own background immediately. [Updated transition screenshot](review/incoming-card-fixed.png). The comparison sheets and playback recording below predate this correction.
+Removed the overlay that copied the previous background onto each incoming card before revealing its own art. All nineteen transitions now show the incoming card’s own background immediately. [Updated transition screenshot](review/incoming-card-fixed.png). The comparison sheets and playback recording below have been regenerated after the dancer revision.
 
 ## Evidence
 
@@ -30,18 +36,18 @@ The root moves independently of the camera. At material boundaries a single figu
 
 ## Remaining differences
 
-| Area                     | Difference from the reference                                                                                                                                                                                                                  |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Dance                    | The key poses are manually interpreted, not tracked from every frame. The silhouette is narrower and more angular; hip, hand, head and heel timing does not match every control frame. The short cycle repeats more uniformly than the source. |
-| Travel                   | World travel is continuous, but mostly linear within each scene. The reference's small accelerations and exact entrance timing have not been motion-tracked.                                                                                   |
-| Reassembly               | The implementation compresses the strip into the grid rapidly around 46–46.7 s. Its paths and overlap differ from the source. Mobile changes to a scrolling grid near the end of this transition.                                              |
-| Typography               | Libre Baskerville and Cormorant Garamond are substitutes. The display heading is heavier. Poster lettering uses generic serif/monospace outlines; neon lacks the exact hand-lettered script, and comic/letterpress lettering differs.          |
-| Stone / paper / concrete | Procedural grain and stains are cleaner and flatter. The stone ornaments lack the source's irregular chipped edges; concrete holes lack its soft sprayed shading.                                                                              |
-| Mosaic / glass           | Tesserae and glass seams are explicit, but their exact shape and density differ. Figure geometry is shared, so stained glass does not have the exact hand-shaped contours of the reference.                                                    |
-| Sampler / patch          | Real crosses and threads are drawn, but weave density, thread direction and patch outline are simplified.                                                                                                                                      |
-| Low poly                 | Flat polygon shading suggests facets, but does not reproduce a true three-dimensional mesh or the source's exact camera-dependent volume.                                                                                                      |
-| Silkscreen / stencil     | The four portraits are simplified and lack the same ink registration details; the stencil is cleaner than the reference.                                                                                                                       |
-| Audio                    | The supplied video’s AAC track is included at the user’s request, without re-encoding. Its decoded PCM hash matches the original. The dance remains an interpreted motion sequence.                                                            |
+| Area                     | Difference from the reference                                                                                                                                                                                                                        |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dance                    | The key poses are manually interpreted, not tracked from every frame. Rounded contours and a wider torso bring the silhouette closer; exact hip, hand, head and heel timing still differs. The eight-pose gait remains more regular than the source. |
+| Travel                   | World travel is continuous, but mostly linear within each scene. The reference's small accelerations and exact entrance timing have not been motion-tracked.                                                                                         |
+| Reassembly               | The implementation compresses the strip into the grid rapidly around 46–46.7 s. Its paths and overlap differ from the source. Mobile changes to a scrolling grid near the end of this transition.                                                    |
+| Typography               | Libre Baskerville and Cormorant Garamond are substitutes. The display heading is heavier. Poster lettering uses generic serif/monospace outlines; neon lacks the exact hand-lettered script, and comic/letterpress lettering differs.                |
+| Stone / paper / concrete | Procedural grain and stains are cleaner and flatter. The stone ornaments lack the source's irregular chipped edges; concrete holes lack its soft sprayed shading.                                                                                    |
+| Mosaic / glass           | Tesserae and glass seams are explicit, but their exact shape and density differ. Figure geometry is shared, so stained glass does not have the exact hand-shaped contours of the reference.                                                          |
+| Sampler / patch          | Real crosses and threads are drawn, but weave density, thread direction and patch outline are simplified.                                                                                                                                            |
+| Low poly                 | Flat polygon shading suggests facets, but does not reproduce a true three-dimensional mesh or the source's exact camera-dependent volume.                                                                                                            |
+| Silkscreen / stencil     | The four portraits are simplified and lack the same ink registration details; the stencil is cleaner than the reference.                                                                                                                             |
+| Audio                    | The supplied video’s AAC track is included at the user’s request, without re-encoding. Its decoded PCM hash matches the original. The dance remains an interpreted motion sequence.                                                                  |
 
 ### Small text and ornament approximations
 

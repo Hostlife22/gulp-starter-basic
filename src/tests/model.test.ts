@@ -135,3 +135,49 @@ describe("shared clock", () => {
     expect(c.playing).toBe(false);
   });
 });
+
+describe("reference dancer rig", () => {
+  it("keeps projected bones within their fixed lengths and a toe on the floor", () => {
+    const distance = (
+      a: { x: number; y: number },
+      b: { x: number; y: number },
+    ) => Math.hypot(a.x - b.x, a.y - b.y);
+    for (let time = 0; time <= DURATION; time += 1 / 60) {
+      const p = poseAt(time);
+      for (const side of ["L", "R"] as const) {
+        expect(
+          distance(p[`shoulder${side}`], p[`elbow${side}`]),
+        ).toBeLessThanOrEqual(48.01);
+        expect(
+          distance(p[`elbow${side}`], p[`hand${side}`]),
+        ).toBeLessThanOrEqual(43.01);
+        expect(distance(p[`hip${side}`], p[`knee${side}`])).toBeLessThanOrEqual(
+          79.01,
+        );
+        expect(
+          distance(p[`knee${side}`], p[`ankle${side}`]),
+        ).toBeLessThanOrEqual(77.01);
+        expect(p[`toe${side}`].y).toBeLessThanOrEqual(498.01);
+      }
+      expect(Math.max(p.toeL.y, p.toeR.y)).toBeCloseTo(498, 3);
+    }
+  });
+  it("has continuous joints across animation cycles and reference anchors", () => {
+    for (let time = 0.001; time < DURATION; time += 0.007) {
+      const a = poseAt(time - 0.00001),
+        b = poseAt(time + 0.00001);
+      for (const key of [
+        "head",
+        "handL",
+        "handR",
+        "kneeL",
+        "kneeR",
+        "ankleL",
+        "ankleR",
+      ] as const)
+        expect(
+          Math.hypot(a[key].x - b[key].x, a[key].y - b[key].y),
+        ).toBeLessThan(0.1);
+    }
+  });
+});

@@ -10,16 +10,17 @@ React owns semantic UI and lifecycle. One requestAnimationFrame advances the clo
 - `src/animation/clock.ts`: pause, seek, hidden-tab suspension, duration clamp. Long frames advance at most 100 ms to avoid surprising jumps.
 - `src/animation/timeline.ts`: editable scene boundaries, continuous world root, introduction, reassembly and fade.
 - `src/animation/galleryLayout.ts`: shared 1280×720 coordinate system, strip pitch and final grid.
-- `src/animation/choreography.ts`: piecewise smooth key poses. Head, neck, torso, hip, elbows, hands, knees, ankles and toes share one phase.
+- `src/animation/choreography.ts`: eight smooth foot-contact poses, reference phase anchors, and a separate hand/torso gesture track. Heel rise and whole-foot pickup are independent.
+- `src/animation/rig.ts`: measured body proportions, separate shoulder/hip joints and two-bone inverse kinematics. The bending plane is projected into 2D for foreshortening; projected bones never exceed their model lengths.
 - `src/artworks/`: four era modules produce twenty independent SVG compositions. SVGs are decoded once into cached canvases; blob URLs are revoked. IDs are isolated in separate SVG documents.
-- `src/renderers/figure.ts`: common polygons, material outlines and a shared sampled mask for pecking, mosaic, cross-stitch, ASCII and pixels.
+- `src/renderers/figure.ts`: rounded articulated contours, curls, fedora, cuffs, shoes, costume details, material outlines and a shared sampled mask for pecking, mosaic, cross-stitch, ASCII and pixels.
 - `src/renderers/gallery.ts`: visibility culling, card transforms, material clipping masks, captions and hit regions.
 
 ## Coordinates and transitions
 
 The strip is measured in poster units: a 535-square work and a 580-unit pitch. The root moves in strip world coordinates, separately from camera position. Figure material is clipped to each poster's interval including its right gutter; the adjacent interval begins where the next frame starts. This avoids duplicate opaque figures and preserves the part crossing the gap.
 
-The following poster shows the preceding background until its own SVG is exposed by a horizontal mask. Each card interpolates independently to its final grid position. Other figures fade in during reassembly; the active figure remains visible.
+Each poster displays its own background immediately when it enters the viewport. Each card interpolates independently to its final grid position. Other figures fade in during reassembly; the active figure remains visible.
 
 ## Rendering and resources
 

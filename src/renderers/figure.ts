@@ -2,7 +2,16 @@ import type { Point, Pose } from "../animation/rig";
 import type { ArtworkDefinition } from "../data/styles";
 export interface Part {
   points: Point[];
-  kind: "cloth" | "skin" | "white" | "shoe" | "hat" | "trouser" | "band";
+  kind:
+    | "cloth"
+    | "skin"
+    | "white"
+    | "shirt"
+    | "lapel"
+    | "shoe"
+    | "hat"
+    | "trouser"
+    | "band";
 }
 function limb(a: Point, b: Point, wa: number, wb: number): Point[] {
   const d = Math.hypot(b.x - a.x, b.y - a.y) || 1,
@@ -26,61 +35,201 @@ function ellipse(p: Point, rx: number, ry: number, angle = 0) {
     };
   });
 }
+// Rounded contours keep the cartoon silhouette intact in vector and raster styles.
+function rounded(points: Point[], radius = 5): Point[] {
+  return points.flatMap((p, i) => {
+    const before = points[(i + points.length - 1) % points.length];
+    const after = points[(i + 1) % points.length];
+    const inset = (other: Point) => {
+      const d = Math.hypot(other.x - p.x, other.y - p.y);
+      const t = Math.min(0.35, radius / Math.max(0.01, d));
+      return { x: p.x + (other.x - p.x) * t, y: p.y + (other.y - p.y) * t };
+    };
+    const a = inset(before),
+      b = inset(after);
+    return [0, 0.33, 0.67, 1].map((t) => ({
+      x: (1 - t) ** 2 * a.x + 2 * t * (1 - t) * p.x + t * t * b.x,
+      y: (1 - t) ** 2 * a.y + 2 * t * (1 - t) * p.y + t * t * b.y,
+    }));
+  });
+}
+function articulated(
+  a: Point,
+  b: Point,
+  c: Point,
+  widths: [number, number, number],
+) {
+  const normal = (a: Point, b: Point) => {
+    const d = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+    return { x: -(b.y - a.y) / d, y: (b.x - a.x) / d };
+  };
+  const n1 = normal(a, b),
+    n2 = normal(b, c);
+  const mid = { x: (n1.x + n2.x) / 2, y: (n1.y + n2.y) / 2 };
+  const point = (p: Point, n: Point, w: number) => ({
+    x: p.x + n.x * w,
+    y: p.y + n.y * w,
+  });
+  return rounded(
+    [
+      point(a, n1, widths[0]),
+      point(b, mid, widths[1]),
+      point(c, n2, widths[2]),
+      point(c, n2, -widths[2]),
+      point(b, mid, -widths[1]),
+      point(a, n1, -widths[0]),
+    ],
+    9,
+  );
+}
 export function figureParts(p: Pose): Part[] {
   const parts: Part[] = [];
   const add = (points: Point[], kind: Part["kind"] = "cloth") =>
     parts.push({ points, kind });
-  add(limb(p.hip, p.kneeR, 11, 8), "trouser");
-  add(limb(p.kneeR, p.ankleR, 8, 6), "trouser");
-  add(limb(p.hip, p.kneeL, 12, 9), "trouser");
-  add(limb(p.kneeL, p.ankleL, 9, 6), "trouser");
-  add(limb({ x: p.ankleL.x, y: p.ankleL.y - 9 }, p.ankleL, 6, 6), "white");
-  add(limb({ x: p.ankleR.x, y: p.ankleR.y - 9 }, p.ankleR, 6, 6), "white");
-  add(limb(p.ankleL, p.toeL, 7, 6), "shoe");
-  add(limb(p.ankleR, p.toeR, 7, 6), "shoe");
-  add(limb(p.shoulder, p.elbowR, 9, 6));
-  add(limb(p.elbowR, p.handR, 6, 4));
-  add(ellipse(p.handR, 5, 9, 0.2), "skin");
-  add([
-    { x: p.shoulder.x - 20, y: p.shoulder.y - 2 },
-    { x: p.shoulder.x + 20, y: p.shoulder.y },
-    { x: p.hip.x + 17, y: p.hip.y + 4 },
-    { x: p.hip.x - 16, y: p.hip.y + 4 },
-  ]);
+  const shoe = (ankle: Point, toe: Point) => {
+    const angle = Math.atan2(toe.y - ankle.y, toe.x - ankle.x);
+    const length = Math.hypot(toe.x - ankle.x, toe.y - ankle.y);
+    const direction = toe.x < ankle.x ? -1 : 1;
+    const transform = (x: number, y: number) => ({
+      x: ankle.x + x * Math.cos(angle) - y * Math.sin(angle) * direction,
+      y: ankle.y + x * Math.sin(angle) + y * Math.cos(angle) * direction,
+    });
+    add(
+      rounded(
+        [
+          transform(-9, -7),
+          transform(4, -9),
+          transform(10, -3),
+          transform(length + 7, -2),
+          transform(length + 10, 4),
+          transform(length + 5, 9),
+          transform(-9, 9),
+        ],
+        6,
+      ),
+      "shoe",
+    );
+  };
+  for (const side of ["R", "L"] as const) {
+    const hip = p[`hip${side}`],
+      knee = p[`knee${side}`],
+      ankle = p[`ankle${side}`];
+    const d = Math.hypot(ankle.x - knee.x, ankle.y - knee.y);
+    const cuff = {
+      x: ankle.x - ((ankle.x - knee.x) / d) * 15,
+      y: ankle.y - ((ankle.y - knee.y) / d) * 15,
+    };
+    add(articulated(hip, knee, cuff, [16, 12, 10]), "trouser");
+    add(rounded(limb(cuff, ankle, 8, 7), 4), "white");
+    shoe(ankle, p[`toe${side}`]);
+  }
+  // Rear sleeve first; front sleeve and gloved hand overlap the jacket.
+  add(articulated(p.shoulderR, p.elbowR, p.handR, [14, 11, 7]));
+  const left = p.shoulderL,
+    right = p.shoulderR;
+  add(
+    rounded(
+      [
+        { x: left.x - 5, y: left.y - 4 },
+        { x: p.shoulder.x - 12, y: p.shoulder.y - 5 },
+        { x: p.shoulder.x, y: p.shoulder.y + 4 },
+        { x: p.shoulder.x + 13, y: p.shoulder.y - 6 },
+        { x: right.x + 5, y: right.y - 3 },
+        { x: p.hip.x + 21, y: p.hip.y - 29 },
+        { x: p.hip.x + 25, y: p.hip.y + 9 },
+        { x: p.hip.x - 26, y: p.hip.y + 9 },
+        { x: p.hip.x - 21, y: p.hip.y - 28 },
+      ],
+      7,
+    ),
+  );
   add(
     [
-      { x: p.shoulder.x - 7, y: p.shoulder.y },
-      { x: p.shoulder.x + 5, y: p.shoulder.y + 4 },
-      { x: p.hip.x - 1, y: p.hip.y - 24 },
+      { x: p.shoulder.x - 12, y: p.shoulder.y },
+      { x: p.shoulder.x + 9, y: p.shoulder.y },
+      { x: p.hip.x + 5, y: p.hip.y - 37 },
+      { x: p.hip.x - 6, y: p.hip.y - 37 },
     ],
-    "white",
+    "shirt",
   );
-  add(limb(p.shoulder, p.head, 6, 8), "skin");
-  add(ellipse(p.head, 13, 19, p.tilt), "skin");
+  for (const side of [-1, 1]) {
+    add(
+      [
+        { x: p.shoulder.x + side * 25, y: p.shoulder.y + 22 },
+        { x: p.shoulder.x + side * 6, y: p.shoulder.y + 39 },
+        { x: p.shoulder.x + side * 6, y: p.shoulder.y + 43 },
+        { x: p.shoulder.x + side * 25, y: p.shoulder.y + 26 },
+      ],
+      "lapel",
+    );
+  }
   add(
-    [
-      { x: p.head.x - 8, y: p.head.y - 14 },
-      { x: p.head.x + 13, y: p.head.y - 9 },
-      { x: p.head.x + 11, y: p.head.y + 10 },
-      { x: p.head.x + 4, y: p.head.y + 14 },
-      { x: p.head.x + 2, y: p.head.y - 5 },
-    ],
-    "shoe",
+    rounded(limb(p.neck, { x: p.head.x, y: p.head.y + 15 }, 7, 8), 4),
+    "skin",
   );
-  add(limb(p.shoulder, p.elbowL, 9, 6));
-  add(limb(p.elbowL, p.handL, 6, 4));
-  add(ellipse(p.handL, 6, 9, -0.6), "white");
-  const hat = (x: number, y: number): Point => ({
+  const head = (x: number, y: number): Point => ({
     x: p.head.x + x * Math.cos(p.tilt) - y * Math.sin(p.tilt),
     y: p.head.y + x * Math.sin(p.tilt) + y * Math.cos(p.tilt),
   });
-  add([hat(-16, -17), hat(-14, -36), hat(11, -39), hat(17, -18)], "hat");
-  add([hat(-16, -21), hat(16, -22), hat(17, -17), hat(-17, -16)], "band");
-  add([hat(-28, -18), hat(29, -19), hat(28, -13), hat(-28, -12)], "hat");
-  return parts.map((part) => ({
-    ...part,
-    points: part.points.map((point) => ({ x: point.x * 1.25, y: point.y })),
-  }));
+  add(ellipse(p.head, 23, 27, p.tilt), "shoe");
+  for (const [x, y] of [
+    [-18, -9],
+    [-21, 2],
+    [-19, 12],
+    [-13, 21],
+    [18, -8],
+    [21, 3],
+    [18, 15],
+  ])
+    add(ellipse(head(x, y), 6, 8, p.tilt), "shoe");
+  add(
+    rounded(
+      [
+        head(-13, -17),
+        head(9, -18),
+        head(16, -8),
+        head(15, 1),
+        head(19, 5),
+        head(13, 9),
+        head(10, 19),
+        head(1, 24),
+        head(-10, 20),
+        head(-15, 8),
+      ],
+      5,
+    ),
+    "skin",
+  );
+  add(articulated(p.shoulderL, p.elbowL, p.handL, [14, 10, 6]));
+  const hand = (elbow: Point, wrist: Point, glove: boolean) => {
+    const angle =
+      Math.atan2(wrist.y - elbow.y, wrist.x - elbow.x) - Math.PI / 2;
+    add(
+      ellipse(wrist, glove ? 8 : 7, glove ? 14 : 12, angle),
+      glove ? "white" : "skin",
+    );
+  };
+  hand(p.elbowL, p.handL, false);
+  hand(p.elbowR, p.handR, true);
+  // Indented crown and an oval brim, both rotating with the head.
+  add(
+    rounded(
+      [
+        head(-24, -20),
+        head(-22, -39),
+        head(-12, -42),
+        head(-4, -38),
+        head(7, -45),
+        head(20, -40),
+        head(25, -20),
+      ],
+      4,
+    ),
+    "hat",
+  );
+  add([head(-24, -25), head(24, -25), head(25, -19), head(-25, -19)], "band");
+  add(ellipse(head(0, -18), 40, 5, p.tilt), "hat");
+  return parts;
 }
 function trace(ctx: CanvasRenderingContext2D, points: Point[]) {
   ctx.beginPath();
@@ -89,6 +238,14 @@ function trace(ctx: CanvasRenderingContext2D, points: Point[]) {
 }
 function partColor(part: Part, art: ArtworkDefinition) {
   if (art.number === 7) return "#090c0b";
+  if (part.kind === "shirt")
+    return [13, 20].includes(art.number)
+      ? "#171719"
+      : [2, 5, 12].includes(art.number)
+        ? "#dbc16e"
+        : "#eee6d2";
+  if (part.kind === "lapel")
+    return art.number === 13 ? "#201719" : art.palette[1];
   if (part.kind === "cloth") return art.palette[1];
   if (part.kind === "trouser")
     return art.number === 5 ? "#171a1b" : art.palette[1];
@@ -143,11 +300,37 @@ export function drawVector(
       kind === "glass" ? "#201f32" : art.number === 13 ? "#202322" : color;
     ctx.lineWidth = kind === "glass" ? 2.3 : 1.2;
     ctx.stroke();
-    if (kind === "faceted") {
-      const [a, b, c] = part.points;
-      trace(ctx, [a, b, c]);
-      ctx.fillStyle = part.kind === "cloth" ? "#85858d" : "#d7be90";
+    if (kind === "patch" && part.kind === "shirt") {
+      const [a, b, c, d] = part.points;
+      const at = (a: Point, b: Point, t: number) => ({
+        x: a.x + (b.x - a.x) * t,
+        y: a.y + (b.y - a.y) * t,
+      });
+      trace(ctx, [
+        at(a, d, 0.48),
+        at(b, c, 0.48),
+        at(b, c, 0.66),
+        at(a, d, 0.66),
+      ]);
+      ctx.fillStyle = "#eae4d9";
       ctx.fill();
+    }
+    if (kind === "faceted") {
+      const a = part.points[0];
+      const b = part.points[Math.floor(part.points.length / 3)];
+      const c = part.points[Math.floor((part.points.length * 2) / 3)];
+      ctx.save();
+      trace(ctx, part.points);
+      ctx.clip();
+      trace(ctx, [a, b, c]);
+      ctx.fillStyle =
+        part.kind === "skin"
+          ? "#d7be90"
+          : part.kind === "white" || part.kind === "shirt"
+            ? "#d7d2c0"
+            : "#555861";
+      ctx.fill();
+      ctx.restore();
     }
     if (kind === "glass") {
       ctx.save();
@@ -164,7 +347,10 @@ export function drawVector(
       }
       ctx.restore();
     }
-    if (kind === "patch" || art.number === 10 || art.number === 5) {
+    if (
+      (kind === "patch" || art.number === 10 || art.number === 5) &&
+      (part.kind === "cloth" || part.kind === "trouser")
+    ) {
       ctx.save();
       trace(ctx, part.points);
       ctx.clip();
@@ -172,7 +358,13 @@ export function drawVector(
       ctx.globalAlpha = 0.48;
       ctx.lineWidth = 0.55;
       const a = part.points[0];
-      for (let x = a.x - 45; x < a.x + 70; x += 3) {
+      if (art.number === 5) {
+        ctx.fillStyle = "#e3c56d";
+        for (let y = a.y - 80; y < a.y + 145; y += 7)
+          for (let x = a.x - 45; x < a.x + 70; x += 7)
+            ctx.fillRect(x + (Math.floor(y / 7) % 2) * 3, y, 1.6, 1.6);
+      }
+      for (let x = a.x - 45; art.number !== 5 && x < a.x + 70; x += 3) {
         ctx.beginPath();
         ctx.moveTo(x, a.y - 80);
         ctx.lineTo(x + 9, a.y + 145);
@@ -198,22 +390,22 @@ export class FigureRaster {
   private ctx: CanvasRenderingContext2D;
   private data = new Uint8ClampedArray(0);
   constructor() {
-    this.canvas.width = 200;
+    this.canvas.width = 280;
     this.canvas.height = 535;
     const ctx = this.canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) throw new Error("Canvas 2D is unavailable");
     this.ctx = ctx;
   }
   update(parts: Part[]) {
-    this.ctx.clearRect(0, 0, 200, 535);
+    this.ctx.clearRect(0, 0, 280, 535);
     this.ctx.save();
-    this.ctx.translate(100, 0);
+    this.ctx.translate(140, 0);
     for (const part of parts) {
       trace(this.ctx, part.points);
       this.ctx.fillStyle =
         part.kind === "cloth" || part.kind === "trouser"
           ? "#555555"
-          : part.kind === "white"
+          : part.kind === "white" || part.kind === "shirt"
             ? "#ffffff"
             : part.kind === "skin"
               ? "#aaaaaa"
@@ -221,7 +413,7 @@ export class FigureRaster {
       this.ctx.fill();
     }
     this.ctx.restore();
-    this.data = this.ctx.getImageData(0, 150, 200, 385).data;
+    this.data = this.ctx.getImageData(0, 150, 280, 385).data;
   }
   draw(ctx: CanvasRenderingContext2D, art: ArtworkDefinition) {
     const kind = art.renderer;
@@ -231,8 +423,8 @@ export class FigureRaster {
     ctx.font = "bold 7px monospace";
     ctx.textBaseline = "middle";
     for (let y = 150; y < 515; y += step) {
-      for (let x = -85; x < 85; x += step) {
-        const offset = ((y - 150) * 200 + x + 100) * 4;
+      for (let x = -135; x < 135; x += step) {
+        const offset = ((y - 150) * 280 + x + 140) * 4;
         if (this.data[offset + 3] < 100) continue;
         const material = this.data[offset];
         ctx.fillStyle =
