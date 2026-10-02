@@ -16,7 +16,13 @@ Eight foot-contact poses and reference phase anchors replace the old five-pose l
 
 Removed the overlay that copied the previous background onto each incoming card before revealing its own art. All nineteen transitions now show the incoming card’s own background immediately. [Updated transition screenshot](review/incoming-card-fixed.png). The comparison sheets and playback recording below have been regenerated after the dancer revision.
 
+## Travel pacing
+
+The supplied video was measured using optical flow on static poster details. In the silhouette episode (16.4–18.5 s), camera speed varies from approximately 450 px/s at the crossing to 115 px/s near the centre. The implementation now uses a smooth travel curve with approximately the same 4:1 ratio across the nineteen moving episodes. The final patch keeps its existing arrival and hold. Audio and dance pose timing keep the original clock. This is a fitted rhythm, not a frame-by-frame motion trace.
+
 ## Evidence
+
+The comparison sheets and full recording below predate the travel-pacing change.
 
 Reference is on the left; implementation is on the right:
 
@@ -43,7 +49,7 @@ The root moves independently of the camera. At material boundaries a single figu
 | Area                     | Difference from the reference                                                                                                                                                                                                                        |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Dance                    | The key poses are manually interpreted, not tracked from every frame. Rounded contours and a wider torso bring the silhouette closer; exact hip, hand, head and heel timing still differs. The eight-pose gait remains more regular than the source. |
-| Travel                   | World travel is continuous, but mostly linear within each scene. The reference's small accelerations and exact entrance timing have not been motion-tracked.                                                                                         |
+| Travel                   | World travel now slows near each centre and accelerates through crossings. The curve uses measured reference speeds; exact acceleration and entrance timing remain approximations.                                                                   |
 | Reassembly               | The implementation compresses the strip into the grid rapidly around 46–46.7 s. Its paths and overlap differ from the source. Mobile changes to a scrolling grid near the end of this transition.                                                    |
 | Typography               | Libre Baskerville and Cormorant Garamond are substitutes. The display heading is heavier. Poster lettering uses generic serif/monospace outlines; neon lacks the exact hand-lettered script, and comic/letterpress lettering differs.                |
 | Stone / paper / concrete | Procedural grain and stains are cleaner and flatter. The stone ornaments lack the source's irregular chipped edges; concrete holes lack its soft sprayed shading.                                                                                    |

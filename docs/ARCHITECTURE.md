@@ -46,6 +46,7 @@ Fonts and artwork SVGs are loaded before the loop starts. Canvas 2D failure show
 
 - `data/styles.ts`: twenty ordered artwork definitions, captions, palettes and reference moments.
 - `animation/timeline.ts`: scene boundaries, continuous world root, introduction, reassembly and persistent final gallery.
+- `animation/travel.ts`: shared strip dimensions and a two-part cubic Hermite travel curve. Each crossing is fast, the poster centre is slow, and position/velocity match at the centre. Scene durations and the audio clock remain unchanged.
 - `animation/galleryLayout.ts`: 1280×720 composition, 535-unit posters, 580-unit pitch and grid coordinates.
 - `data/choreography.ts`: editable foot-contact poses, phase anchors and named hand/torso gesture fields.
 - `animation/choreography.ts`: interpolation and pose construction. Lookup times are prepared once, rather than allocated on every frame.

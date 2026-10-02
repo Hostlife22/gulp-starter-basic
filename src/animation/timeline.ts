@@ -1,3 +1,4 @@
+import { stripMetrics, travelAcrossArtwork } from "./travel";
 export const DURATION = 52.017;
 export const boundaries = [
   4.1, 6.2, 8.2, 10.3, 12.3, 14.4, 16.4, 18.5, 20.5, 22.6, 24.6, 26.7, 28.7,
@@ -18,14 +19,17 @@ export function sceneAt(time: number) {
     ),
   );
 }
-// Continuous world-space root. Each episode includes travel through the following gutter.
+// Continuous world-space root. Slow at each poster centre, accelerate through the gutter.
 export function rootAt(time: number) {
   const t = clamp(time, 4.1, 44.4);
   const index = sceneAt(t);
   const start = boundaries[index];
   const end = boundaries[index + 1];
   if (index === 19) return 19 * 580 + mix(20, 255, smooth((t - start) / 1.1));
-  return index * 580 + mix(20, 600, (t - start) / (end - start));
+  return (
+    index * stripMetrics.pitch +
+    travelAcrossArtwork((t - start) / (end - start))
+  );
 }
 export function timelineAt(time: number) {
   const t = clamp(time, 0, DURATION);

@@ -1,9 +1,10 @@
+import { stripMetrics } from "./travel";
 import { mix, timelineAt, cameraAt } from "./timeline";
 export const layout = {
   width: 1280,
   height: 720,
-  poster: 535,
-  pitch: 580,
+  poster: stripMetrics.poster,
+  pitch: stripMetrics.pitch,
   top: 61,
   gridX: 672,
   gridY: 111,

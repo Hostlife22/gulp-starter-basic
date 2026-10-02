@@ -7,7 +7,7 @@ Date: 2 October 2026. Local environment: macOS x64, Intel Core i7-9750H @ 2.60 G
 | Check                        | Result                                                                                                                               |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `npm run check`              | Passed: Prettier, ESLint, strict TypeScript, unit tests, production build                                                            |
-| Vitest                       | 43 passing tests                                                                                                                     |
+| Vitest                       | 45 passing tests                                                                                                                     |
 | `npm run test:e2e`           | 8 passing browser scenarios, explicitly invoked                                                                                      |
 | Real playback                | Recorded a complete showing; the slider reached 52.017 s without seek                                                                |
 | Reference frames             | Captured 49 moments: intro, twenty style controls, additional patch hold, six boundaries in three phases, reassembly, final and fade |
@@ -71,3 +71,7 @@ Final-screen regression: the browser plays from 51.8 seconds through the real cl
 ## Refactor verification
 
 The app was decomposed into a playback controller, React adapters, canvas runtime, presentation components, motion data and figure renderers. All 29 before/after canvas-and-title hashes matched in the same local Chromium environment, including every style and four phone views. [Recorded comparison results](review/refactor.json). All eight browser scenarios passed after the refactor, including the final hold and blocked-autoplay reload. Five controller tests were added for notifications, media reconnection, mute/replay, blocked playback, hidden tabs, end-of-playback and late asynchronous failures.
+
+## Travel pacing verification
+
+Two regression tests cover all nineteen moving episodes: centre alignment, crossing speed over three times centre speed, continuous centre velocity and forward motion without reversal. Existing gutter, boundary and renderer checks also pass. Reference speeds were sampled at 10 Hz with Lucas–Kanade optical flow in the static upper poster region; clean silhouette samples range from 115 to 450 px/s. Repetitive textures can confuse optical flow, so those intervals were excluded from the estimate.

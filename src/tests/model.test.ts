@@ -6,6 +6,7 @@ import {
   rootAt,
   timelineAt,
   DURATION,
+  cameraAt,
 } from "../animation/timeline";
 import { cardAt, layout } from "../animation/galleryLayout";
 import { Clock } from "../animation/clock";
@@ -179,6 +180,38 @@ describe("reference dancer rig", () => {
         expect(
           Math.hypot(a[key].x - b[key].x, a[key].y - b[key].y),
         ).toBeLessThan(0.1);
+    }
+  });
+});
+
+describe("artwork reading rhythm", () => {
+  it("slows near every poster centre and accelerates through the crossing", () => {
+    const speed = (time: number) =>
+      (rootAt(time + 0.001) - rootAt(time - 0.001)) / 0.002;
+    for (let i = 0; i < 19; i++) {
+      const start = boundaries[i],
+        duration = boundaries[i + 1] - start;
+      const middle = start + duration / 2;
+      expect(rootAt(middle) - i * layout.pitch).toBeCloseTo(
+        layout.poster / 2,
+        6,
+      );
+      expect(speed(start + duration * 0.02)).toBeGreaterThan(speed(middle) * 3);
+      expect(speed(start + duration * 0.98)).toBeGreaterThan(speed(middle) * 3);
+      expect(
+        Math.abs(speed(middle - 0.001) - speed(middle + 0.001)),
+      ).toBeLessThan(2);
+      const card = cardAt(i, middle);
+      const dancerX = 425 + rootAt(middle) - cameraAt(middle);
+      expect(card.x + card.size / 2).toBeCloseTo(dancerX, 6);
+    }
+  });
+  it("moves forward without overshooting or reversing, including slowed sections", () => {
+    let previous = rootAt(4.1);
+    for (let time = 4.101; time < 44.4; time += 0.001) {
+      const current = rootAt(time);
+      expect(current).toBeGreaterThanOrEqual(previous);
+      previous = current;
     }
   });
 });
