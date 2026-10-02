@@ -42,6 +42,8 @@ Vite builds a static `/gulp-starter-basic/` site. JavaScript is approximately 25
 
 ## Publication
 
+The [manually dispatched Linux browser workflow](https://github.com/Hostlife22/gulp-starter-basic/actions/runs/37033301813) passed all six scenarios, including AAC playback.
+
 The actual default branch is `master`. GitHub Pages has been configured for an Actions build. Deployment and public URL checks are recorded here after the first successful publication.
 
 ## Soundtrack verification

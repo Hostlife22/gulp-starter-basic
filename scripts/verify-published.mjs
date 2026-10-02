@@ -34,14 +34,12 @@ await page.waitForFunction(() => {
   const audio = document.querySelector("audio");
   return audio && !audio.paused && audio.currentTime > 48;
 });
-const audioPlayback = await page
-  .locator("audio")
-  .evaluate((el) => ({
-    time: el.currentTime,
-    duration: el.duration,
-    paused: el.paused,
-    muted: el.muted,
-  }));
+const audioPlayback = await page.locator("audio").evaluate((el) => ({
+  time: el.currentTime,
+  duration: el.duration,
+  paused: el.paused,
+  muted: el.muted,
+}));
 await page.getByRole("button", { name: "Pause", exact: true }).click();
 const report = {
   audioPlayback,
