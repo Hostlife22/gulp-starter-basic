@@ -3,6 +3,7 @@ import { cardAt, layout } from "../animation/galleryLayout";
 import { timelineAt, mix, cameraAt } from "../animation/timeline";
 import { poseAt } from "../animation/choreography";
 import { drawVector, figureParts, FigureRaster } from "./figure";
+import { CardShadow } from "./cardShadow";
 export interface HitBox {
   x: number;
   y: number;
@@ -12,6 +13,7 @@ export interface HitBox {
 }
 export class GalleryRenderer {
   private raster = new FigureRaster();
+  private shadow = new CardShadow();
   hits: HitBox[] = [];
   constructor(private backgrounds: HTMLCanvasElement[]) {}
   render(
@@ -34,7 +36,7 @@ export class GalleryRenderer {
     ctx.globalAlpha = 1;
     const pose = poseAt(time);
     const parts = figureParts(pose);
-    this.raster.update(parts);
+    let rasterReady = false;
     this.hits = [];
     // Figure drawn once in world space through disjoint masks, including the gutter.
     const camera = cameraAt(time);
@@ -49,9 +51,7 @@ export class GalleryRenderer {
         return;
       ctx.save();
       ctx.globalAlpha = card.alpha;
-      ctx.shadowColor = "rgba(58,42,24,.18)";
-      ctx.shadowBlur = card.size * 0.018;
-      ctx.shadowOffsetY = card.size * 0.009;
+      this.shadow.draw(ctx, card.x, card.y, card.size);
       ctx.drawImage(
         this.backgrounds[index],
         card.x,
@@ -59,8 +59,7 @@ export class GalleryRenderer {
         card.size,
         card.size,
       );
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetY = 0;
+
       ctx.strokeStyle = "rgba(68,54,36,.16)";
       ctx.lineWidth = 0.7;
       ctx.strokeRect(card.x, card.y, card.size, card.size);
@@ -88,9 +87,13 @@ export class GalleryRenderer {
           ["pecked", "mosaic", "stitch", "ascii", "pixel"].includes(
             art.renderer,
           )
-        )
+        ) {
+          if (!rasterReady) {
+            this.raster.update(parts);
+            rasterReady = true;
+          }
           this.raster.draw(ctx, art);
-        else drawVector(ctx, parts, art);
+        } else drawVector(ctx, parts, art);
       }
       ctx.restore();
       const ratio = card.size / 535;

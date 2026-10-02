@@ -67,7 +67,7 @@ The world root and camera move independently. Each material clips the dancer to 
 
 ## Resource limits
 
-All runtime content is local. There is no WebGL, video element, worker, API or external image. DPR is capped at two, offscreen large cards are culled, and paused scenes redraw only after seek or resize. Canvas readback still allocates a small material buffer per frame; that remains a known optimization opportunity.
+All runtime content is local. There is no WebGL, video element, worker, API or external image. DPR is capped at two, offscreen large cards are culled, and paused scenes redraw only after seek or resize. Poster shadows are cached by `renderers/cardShadow.ts`. Canvas readback allocates a material buffer only when a visible raster figure needs it, at most once per frame; vector-only scenes skip it.
 
 ## Verification
 

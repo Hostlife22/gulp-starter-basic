@@ -7,7 +7,7 @@ Date: 2 October 2026. Local environment: macOS x64, Intel Core i7-9750H @ 2.60 G
 | Check                        | Result                                                                                                                               |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `npm run check`              | Passed: Prettier, ESLint, strict TypeScript, unit tests, production build                                                            |
-| Vitest                       | 45 passing tests                                                                                                                     |
+| Vitest                       | 46 passing tests                                                                                                                     |
 | `npm run test:e2e`           | 8 passing browser scenarios, explicitly invoked                                                                                      |
 | Real playback                | Recorded a complete showing; the slider reached 52.017 s without seek                                                                |
 | Reference frames             | Captured 49 moments: intro, twenty style controls, additional patch hold, six boundaries in three phases, reassembly, final and fade |
@@ -75,3 +75,9 @@ The app was decomposed into a playback controller, React adapters, canvas runtim
 ## Travel pacing verification
 
 Two regression tests cover all nineteen moving episodes: centre alignment, crossing speed over three times centre speed, continuous centre velocity and forward motion without reversal. Existing gutter, boundary and renderer checks also pass. Reference speeds were sampled at 10 Hz with Lucas–Kanade optical flow in the static upper poster region; clean silhouette samples range from 115 to 450 px/s. Repetitive textures can confuse optical flow, so those intervals were excluded from the estimate.
+
+## Scroll rendering optimization
+
+Poster shadows are rasterized once and reused. Figure mask readback is deferred until a visible raster material needs it, at most once per frame. Travel curves, scene duration and audio timing are unchanged.
+
+A local headless Chromium comparison at 1280×720, DPR 2, sampled 180 frames of the same 16.4–19.4 s scene sequence. Mean frame interval decreased from 102.55 to 42.34 ms (p95 109.30 → 48.00 ms); mean synchronous render time decreased from 1.67 to 0.87 ms. The benchmark includes canvas presentation between animation frames. These are local headless results, not a claim of 60 fps or a measurement of perceived comfort on the user's display. Reproduce with `node scripts/measure-scroll.mjs` while the dev server runs on port 5173.

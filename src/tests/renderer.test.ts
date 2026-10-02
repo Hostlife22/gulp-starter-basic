@@ -3,12 +3,20 @@ import { GalleryRenderer } from "../renderers/gallery";
 import { boundaries } from "../animation/timeline";
 import { artworks } from "../data/styles";
 
+const { updateRaster } = vi.hoisted(() => ({ updateRaster: vi.fn() }));
+
+vi.mock("../renderers/cardShadow", () => ({
+  CardShadow: class {
+    draw() {}
+  },
+}));
+
 // Isolate background compositing from the independent dancer material renderers.
 vi.mock("../renderers/figure", () => ({
   figureParts: () => [],
   drawVector: () => {},
   FigureRaster: class {
-    update() {}
+    update = updateRaster;
     draw() {}
   },
 }));
@@ -46,3 +54,21 @@ it.each(Array.from({ length: 19 }, (_, index) => index))(
     }
   },
 );
+
+it("reads the figure mask only when a visible material needs it, once per frame", () => {
+  const renderer = new GalleryRenderer(
+    artworks.map(() => ({}) as HTMLCanvasElement),
+  );
+  const ctx = new Proxy(
+    {},
+    { get: () => () => {} },
+  ) as CanvasRenderingContext2D;
+  updateRaster.mockClear();
+  renderer.render(ctx, 1280, 720, 17.45, false);
+  expect(updateRaster).not.toHaveBeenCalled();
+  renderer.render(ctx, 1280, 720, 21.55, false);
+  expect(updateRaster).toHaveBeenCalledTimes(1);
+  updateRaster.mockClear();
+  renderer.render(ctx, 1280, 720, 48, false);
+  expect(updateRaster).toHaveBeenCalledTimes(1);
+});
