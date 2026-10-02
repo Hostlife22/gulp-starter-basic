@@ -38,11 +38,11 @@ A separate CDP check exercises repeated seeks, viewport changes and replay, coll
 
 ## Production output
 
-Vite builds a static `/gulp-starter-basic/` site. JavaScript is approximately 253 kB before gzip, 84 kB compressed; CSS is approximately 6 kB. Fonts and licenses are local. Source MP4s, reference images and review artifacts are outside `public` and are not included in `dist`. No API or runtime CDN is used.
+Vite builds a static `/moonwalk-art-gallery/` site. JavaScript is approximately 253 kB before gzip, 84 kB compressed; CSS is approximately 6 kB. Fonts and licenses are local. Source MP4s, reference images and review artifacts are outside `public` and are not included in `dist`. No API or runtime CDN is used.
 
 ## Publication
 
-The [manually dispatched Linux browser workflow](https://github.com/Hostlife22/gulp-starter-basic/actions/runs/37033301813) passed all six scenarios, including AAC playback.
+The [manually dispatched Linux browser workflow](https://github.com/Hostlife22/moonwalk-art-gallery/actions/runs/37033301813) passed all six scenarios, including AAC playback.
 
 The actual default branch is `master`. GitHub Pages has been configured for an Actions build. Deployment and public URL checks are recorded here after the first successful publication.
 

@@ -2,7 +2,7 @@ import { chromium } from "@playwright/test";
 import { writeFile } from "node:fs/promises";
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
-await page.goto("http://localhost:4174/gulp-starter-basic/?time=48");
+await page.goto("http://localhost:4174/moonwalk-art-gallery/?time=48");
 await page.locator(".loading").waitFor({ state: "detached" });
 const client = await page.context().newCDPSession(page);
 await client.send("Performance.enable");

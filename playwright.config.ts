@@ -5,14 +5,14 @@ export default defineConfig({
   workers: 1,
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
-    baseURL: "http://127.0.0.1:5173/gulp-starter-basic/",
+    baseURL: "http://127.0.0.1:5173/moonwalk-art-gallery/",
     viewport: { width: 1280, height: 720 },
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
   webServer: {
     command: "npm run dev -- --port 5173",
-    url: "http://127.0.0.1:5173/gulp-starter-basic/",
+    url: "http://127.0.0.1:5173/moonwalk-art-gallery/",
     reuseExistingServer: !process.env.CI,
   },
 });

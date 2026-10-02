@@ -1,6 +1,6 @@
 import { chromium } from "@playwright/test";
 import { writeFile } from "node:fs/promises";
-const url = "https://hostlife22.github.io/gulp-starter-basic/";
+const url = "https://hostlife22.github.io/moonwalk-art-gallery/";
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 const errors = [],

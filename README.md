@@ -15,7 +15,7 @@ npm ci
 npm run dev
 ```
 
-Open the local `/gulp-starter-basic/` URL printed by Vite. No API, account, CDN, or network request is needed during viewing. Fonts are bundled locally.
+Open the local `/moonwalk-art-gallery/` URL printed by Vite. No API, account, CDN, or network request is needed during viewing. Fonts are bundled locally.
 
 ## Controls
 

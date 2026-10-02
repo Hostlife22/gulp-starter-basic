@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 import { mkdir, writeFile } from "node:fs/promises";
 import os from "node:os";
-const base = "http://localhost:4174/gulp-starter-basic/";
+const base = "http://localhost:4174/moonwalk-art-gallery/";
 await mkdir("docs/review/raw", { recursive: true });
 const browser = await chromium.launch();
 const page = await browser.newPage({

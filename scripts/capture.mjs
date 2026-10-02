@@ -5,11 +5,13 @@ const page = await browser.newPage({
   deviceScaleFactor: 1,
 });
 page.on("pageerror", (e) => console.error(e));
-await page.goto("http://localhost:4174/gulp-starter-basic/?time=50&controls=0");
+await page.goto(
+  "http://localhost:4174/moonwalk-art-gallery/?time=50&controls=0",
+);
 await page.locator(".loading").waitFor({ state: "detached" });
 await page.screenshot({ path: "docs/review/overview-50.png" });
 await page.goto(
-  "http://localhost:4174/gulp-starter-basic/?time=31.7&controls=0",
+  "http://localhost:4174/moonwalk-art-gallery/?time=31.7&controls=0",
 );
 await page.locator(".loading").waitFor({ state: "detached" });
 await page.screenshot({ path: "docs/review/neon.png" });
