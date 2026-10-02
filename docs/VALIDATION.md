@@ -61,3 +61,5 @@ At the user’s explicit request, the original AAC audio stream was copied to `p
 Five unit tests cover default-on audio, blocked autoplay recovery, user activation, drift, pause/seek/mute/hidden-tab handling and a rejected media start. A browser scenario verifies actual audio playback, pause, seek to 31.7 seconds, persistent mute through Replay, and re-enabling at the current clock time. The visual recording produced by Playwright does not capture system audio; the deployed application does play it.
 
 Autoplay checks exercise both browser policies: permitted audible autoplay and blocked autoplay followed by a gesture. The blocked case injects a NotAllowedError until a trusted browser gesture because headless Chromium can bypass its autoplay policy; subsequent playback uses the actual audio decoder. Both checks verify that later gestures respect deliberate mute.
+
+The blocked-autoplay scenario also reloads the page and verifies that the control shows “Sound start” with aria-pressed=false, one press starts actual audio, and “Sound on” appears after playback begins.

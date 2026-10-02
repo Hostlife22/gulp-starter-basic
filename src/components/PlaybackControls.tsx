@@ -6,6 +6,7 @@ interface Props {
   hidden: boolean;
   active: number;
   soundOn: boolean;
+  soundBlocked: boolean;
   onSound: () => void;
   onToggle: () => void;
   onSeek: (time: number) => void;
@@ -43,10 +44,16 @@ export function PlaybackControls(p: Props) {
           </button>
           <button
             onClick={p.onSound}
-            aria-label={p.soundOn ? "Mute sound" : "Enable sound"}
-            aria-pressed={p.soundOn}
+            aria-label={
+              p.soundBlocked
+                ? "Start sound"
+                : p.soundOn
+                  ? "Mute sound"
+                  : "Enable sound"
+            }
+            aria-pressed={p.soundOn && !p.soundBlocked}
           >
-            Sound {p.soundOn ? "on" : "off"}
+            Sound {p.soundBlocked ? "start" : p.soundOn ? "on" : "off"}
           </button>
           <span className="current-work">
             {String(p.active + 1).padStart(2, "0")} / 20{" "}

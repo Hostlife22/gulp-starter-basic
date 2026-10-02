@@ -55,7 +55,7 @@ export class AudioSync {
           ) {
             this.blocked = true;
             this.onFailure(
-              "Sound is on. Click or press a key to start the music.",
+              "Autoplay was blocked. Click or press a key to start the music.",
               true,
             );
             return;

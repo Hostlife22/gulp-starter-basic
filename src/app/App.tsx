@@ -27,6 +27,7 @@ export function App() {
   const [error, setError] = useState("");
   const [ready, setReady] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
+  const [soundBlocked, setSoundBlocked] = useState(false);
   const [audioError, setAudioError] = useState("");
   const soundPreference = useRef<"muted" | "enabled">("enabled");
   const audio = useRef<HTMLAudioElement>(null);
@@ -35,6 +36,7 @@ export function App() {
     if (!audio.current) return;
     const sync = new AudioSync(audio.current, (message, blocked) => {
       setAudioError(message);
+      setSoundBlocked(blocked);
       if (!blocked) {
         setSoundOn(false);
         soundPreference.current = "muted";
@@ -186,6 +188,10 @@ export function App() {
         ref={audio}
         src={`${import.meta.env.BASE_URL}audio/reference-soundtrack.m4a`}
         preload="metadata"
+        onPlaying={() => {
+          setSoundBlocked(false);
+          setAudioError("");
+        }}
         hidden
         onError={() => {
           setAudioError(
@@ -240,8 +246,9 @@ export function App() {
         playing={status.playing}
         hidden={hidden}
         soundOn={soundOn}
+        soundBlocked={soundBlocked}
         onSound={() => {
-          const enabled = !soundOn;
+          const enabled = soundBlocked || !soundOn;
           soundPreference.current = enabled ? "enabled" : "muted";
           setSoundOn(enabled);
           setAudioError("");

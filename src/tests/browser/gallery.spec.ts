@@ -192,9 +192,6 @@ for (const policy of [
       }
       await page.goto("http://127.0.0.1:5173/moonwalk-art-gallery/");
       await ready(page);
-      await expect(
-        page.getByRole("button", { name: "Mute sound" }),
-      ).toHaveAttribute("aria-pressed", "true");
       const audio = page.locator("audio");
       if (policy === "document-user-activation-required") {
         await expect(page.locator(".media-note")).toContainText(
@@ -203,7 +200,17 @@ for (const policy of [
         expect(
           await audio.evaluate((el) => (el as HTMLAudioElement).paused),
         ).toBe(true);
-        await page.mouse.click(10, 10);
+        const start = page.getByRole("button", { name: "Start sound" });
+        await expect(start).toHaveAttribute("aria-pressed", "false");
+        await start.click();
+        await expect
+          .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).paused))
+          .toBe(false);
+        // Reproduce the reported refresh: one press must also work after reload.
+        await page.reload();
+        await ready(page);
+        await expect(start).toHaveAttribute("aria-pressed", "false");
+        await start.click();
       }
       await expect
         .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).paused))
@@ -211,6 +218,9 @@ for (const policy of [
       expect(await audio.evaluate((el) => (el as HTMLAudioElement).muted)).toBe(
         false,
       );
+      await expect(
+        page.getByRole("button", { name: "Mute sound" }),
+      ).toHaveAttribute("aria-pressed", "true");
       await page.getByRole("button", { name: "Mute sound" }).click();
       await page.mouse.click(10, 10);
       expect(await audio.evaluate((el) => (el as HTMLAudioElement).muted)).toBe(
