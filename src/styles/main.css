@@ -8,6 +8,7 @@
   --display: "Libre Baskerville", Georgia, serif;
   --content: 1280px;
   --touch: 44px;
+  --controls-overlap: 84px;
   --space: 16px;
   color: var(--ink);
   font-family: var(--serif);
@@ -126,9 +127,11 @@ canvas {
   color: var(--muted);
 }
 .controls {
+  position: relative;
+  z-index: 1;
   max-width: 900px;
   padding: 0 24px 16px;
-  margin: 0 auto;
+  margin: calc(-1 * var(--controls-overlap)) auto 0;
   color: var(--muted);
 }
 .transport {
@@ -286,11 +289,6 @@ summary span {
 [hidden] {
   display: none !important;
 }
-@media (min-width: 1600px) {
-  .controls {
-    margin-top: -16px;
-  }
-}
 @media (max-width: 900px) {
   .catalogue {
     margin-left: 24px;
@@ -337,6 +335,7 @@ summary span {
     padding: 0 9px;
   }
   .controls {
+    margin-top: 0;
     padding: 8px 12px 12px;
   }
   .current-work {

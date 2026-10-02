@@ -6,11 +6,17 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 const errors = [],
   badResponses = [],
   external = [],
-  assets = [];
+  assets = [],
+  mediaRangeCancellations = [];
 page.on("pageerror", (e) => errors.push(e.message));
-page.on("requestfailed", (r) =>
-  errors.push(`${r.url()}: ${r.failure()?.errorText}`),
-);
+page.on("requestfailed", (r) => {
+  const reason = r.failure()?.errorText;
+  // Browsers cancel a metadata/range request when a seek requests a later range.
+  // Actual decoding/playback and HTTP responses are independently checked below.
+  if (r.resourceType() === "media" && reason === "net::ERR_ABORTED")
+    mediaRangeCancellations.push(r.url());
+  else errors.push(`${r.url()}: ${reason}`);
+});
 page.on("response", (r) => {
   if (r.status() >= 400)
     badResponses.push({ url: r.url(), status: r.status() });
@@ -43,6 +49,7 @@ const audioPlayback = await page.locator("audio").evaluate((el) => ({
 await page.getByRole("button", { name: "Pause", exact: true }).click();
 const report = {
   audioPlayback,
+  mediaRangeCancellations,
   date: new Date().toISOString(),
   url,
   status: response.status(),
