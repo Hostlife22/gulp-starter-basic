@@ -117,8 +117,7 @@ export function App() {
         dirty = false;
         lastTime = time;
       }
-      if (title.current)
-        title.current.style.opacity = String(state.title * state.fade);
+      if (title.current) title.current.style.opacity = String(state.title);
       if (now - lastUi > 80) {
         setStatus({ time, playing: clock.playing });
         lastUi = now;

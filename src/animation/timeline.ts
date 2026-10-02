@@ -44,7 +44,6 @@ export function timelineAt(time: number) {
         : t < 4.1
           ? 1 - smooth((t - 3.3) / 0.5)
           : smooth((t - 46.7) / 0.8),
-    fade: 1 - smooth((t - 51.2) / 0.817),
     root: rootAt(t),
   };
 }

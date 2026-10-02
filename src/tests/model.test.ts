@@ -80,8 +80,9 @@ describe("choreography and transitions", () => {
       expect(cardAt(i, 46.5).size).toBeLessThan(535);
     }
   });
-  it("finishes with a fade and a finite clock", () => {
-    expect(timelineAt(52.017).fade).toBe(0);
+  it("finishes with a visible gallery and a finite clock", () => {
+    expect(timelineAt(DURATION).title).toBe(1);
+    expect(timelineAt(DURATION).grid).toBe(1);
     expect(timelineAt(48).grid).toBe(1);
     expect(timelineAt(-1).time).toBe(0);
   });

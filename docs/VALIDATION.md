@@ -20,7 +20,7 @@ Date: 2 October 2026. Local environment: macOS x64, Intel Core i7-9750H @ 2.60 G
 
 Nineteen renderer regression cases sample every incoming-card transition at 0.1-second intervals and verify that each visible card paints only its own background.
 
-Unit tests cover unique ordered artwork IDs, deterministic valid SVGs, finite poses, articulation changes, continuous root travel, gutter traversal, final grid coordinates, fade, pause/resume, seek/replay, hidden tabs and end-of-playback stopping.
+Unit tests cover unique ordered artwork IDs, deterministic valid SVGs, finite poses, articulation changes, continuous root travel, gutter traversal, final grid coordinates, visible final title, pause/resume, seek/replay, hidden tabs and end-of-playback stopping.
 
 Browser tests cover real clock progress, pixel stability on pause, seek/replay, all scene controls, key material boundaries, selection through the catalogue, slider keyboard operation, reduced motion, narrow and short windows, canvas fallback, and twenty independently changing final regions. Browser checks are **not** in `check`, push/PR checks or the deploy job. The browser workflow is `workflow_dispatch` only.
 
@@ -65,3 +65,5 @@ Autoplay checks exercise both browser policies: permitted audible autoplay and b
 The blocked-autoplay scenario also reloads the page and verifies that the control shows “Sound start” with aria-pressed=false, one press starts actual audio, and “Sound on” appears after playback begins.
 
 The dancer revision was checked across the full timeline at 60 samples per second for projected bone lengths and floor contact, plus dense continuity checks for hands, knees, ankles and head. All twenty reference captures and the complete playback recording were regenerated.
+
+Final-screen regression: the browser plays from 51.8 seconds through the real clock’s stop at 52.017, verifies opaque artwork pixels in all twenty cards, a visible title, paused audio and an unchanged final image, then verifies Replay. The final hold supersedes the fade in the older full-playback recording.

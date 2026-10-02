@@ -2,6 +2,10 @@
 
 Reviewed on 2 October 2026 against the provided 1280×720 video and its local contact sheets. This is a working procedural interpretation. **It is not a frame-exact copy, and the prompt's strict visual fidelity criterion is not yet satisfied.**
 
+## Final screen
+
+At the user’s request, the final gallery and title remain visible when playback ends at 52.017 seconds. Music and motion stop, and Replay starts a new showing. [Current final screen](review/final-hold.png). The earlier complete recording below still shows the old fade to paper; this ending deliberately differs from the video.
+
 ## Dancer revision
 
 [Video → previous dancer → revised dancer](review/dancer-comparison.jpg) compares the silhouette, letterpress suit, red jacket and embroidered patch at the same timestamps. The revised rig has separate shoulder and hip joints, rounded sleeves and trouser contours, a wider jacket, curly hair, a shaped fedora, white socks and rounded shoes. The red jacket has a dark shirt and V trim; the manuscript jacket uses gold dots.
@@ -32,7 +36,7 @@ Full-resolution local captures are in `docs/review/raw/` (excluded from Git). Th
 
 The desktop title and 5×4 grid use the reference's coordinate proportions. The large strip uses 535-unit squares at y=61 with a 45-unit gutter. All twenty named works are present in order and have individual compositions. The same articulated pose is rendered as stone dots, mosaic pieces, glass, outlines, cross-stitches, neon tubes, ASCII glyphs, pixels, shaded polygons and embroidery.
 
-The root moves independently of the camera. At material boundaries a single figure straddles the gutter and changes material at the next frame. Each incoming card displays its own background from the moment it enters the viewport. Each card moves into the final grid, where all twenty figures change pose together. Recorded playback reaches the final fade through the real clock.
+The root moves independently of the camera. At material boundaries a single figure straddles the gutter and changes material at the next frame. Each incoming card displays its own background from the moment it enters the viewport. Each card moves into the final grid, where all twenty figures change pose together. Playback now stops on the complete grid without fading it out.
 
 ## Remaining differences
 

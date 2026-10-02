@@ -31,7 +31,7 @@ export class GalleryRenderer {
     ctx.save();
     ctx.translate(ox, 0);
     ctx.scale(scale, scale);
-    ctx.globalAlpha = state.fade;
+    ctx.globalAlpha = 1;
     const pose = poseAt(time);
     const parts = figureParts(pose);
     this.raster.update(parts);
@@ -48,7 +48,7 @@ export class GalleryRenderer {
       )
         return;
       ctx.save();
-      ctx.globalAlpha = card.alpha * state.fade;
+      ctx.globalAlpha = card.alpha;
       ctx.shadowColor = "rgba(58,42,24,.18)";
       ctx.shadowBlur = card.size * 0.018;
       ctx.shadowOffsetY = card.size * 0.009;

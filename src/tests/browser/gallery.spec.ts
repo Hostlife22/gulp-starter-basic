@@ -99,6 +99,32 @@ test("final overview contains twenty changing figure regions", async ({
       after[i].filter((value, j) => value !== before[i][j]).length,
       `artwork ${i + 1} changes pose`,
     ).toBeGreaterThan(40);
+  await page.getByLabel("Gallery time in seconds").fill("51.8");
+  await page.getByRole("button", { name: "Play", exact: true }).click();
+  await expect(page.getByLabel("Gallery time in seconds")).toHaveAttribute(
+    "value",
+    "52.017",
+  );
+  await expect(
+    page.getByRole("button", { name: "Play", exact: true }),
+  ).toBeVisible();
+  await expect(page.locator(".title-layer")).toHaveCSS("opacity", "1");
+  const ending = await regions();
+  for (const region of ending) {
+    const alpha = region.filter((_, i) => i % 4 === 3);
+    expect(alpha.filter((value) => value === 255).length).toBeGreaterThan(3000);
+  }
+  await page.waitForTimeout(150);
+  expect(await regions()).toEqual(ending);
+  expect(
+    await page
+      .locator("audio")
+      .evaluate((el) => (el as HTMLAudioElement).paused),
+  ).toBe(true);
+  await page.getByRole("button", { name: /Replay/ }).click();
+  await expect
+    .poll(async () => Number(await page.locator("#time").inputValue()))
+    .toBeLessThan(2);
 });
 test("canvas failure keeps an error and the text catalogue available", async ({
   page,

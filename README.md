@@ -28,7 +28,7 @@ Open the local `/moonwalk-art-gallery/` URL printed by Vite. No API, account, CD
 - Reduced-motion users start with a paused, complete gallery.
 - Hidden browser tabs suspend playback. Resuming does not skip scenes.
 
-For reproducible comparison, use `?time=31.7&seed=1983&controls=0`. The time is in seconds; this is a public presentation feature, not an injected test API. The sequence lasts 52.017 seconds and fades to paper. Replay starts a new showing. The provided video's original AAC soundtrack is included locally. Sound is enabled by default and starts automatically when the browser permits it. If autoplay is blocked, the button shows **Sound start**. One press starts the music; the button changes to **Sound on** when playback begins. A click elsewhere or a key press also retries playback. It follows the shared clock through pause, seek and hidden tabs. A deliberate mute remains in effect on replay.
+For reproducible comparison, use `?time=31.7&seed=1983&controls=0`. The time is in seconds; this is a public presentation feature, not an injected test API. The sequence lasts 52.017 seconds and finishes on the complete twenty-work gallery. Replay starts a new showing. The provided video's original AAC soundtrack is included locally. Sound is enabled by default and starts automatically when the browser permits it. If autoplay is blocked, the button shows **Sound start**. One press starts the music; the button changes to **Sound on** when playback begins. A click elsewhere or a key press also retries playback. It follows the shared clock through pause, seek and hidden tabs. A deliberate mute remains in effect on replay.
 
 ## The twenty works
 

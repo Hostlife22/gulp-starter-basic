@@ -8,7 +8,7 @@ React owns semantic UI and lifecycle. One requestAnimationFrame advances the clo
 
 - `src/data/styles.ts`: the twenty typed artwork definitions, captions, palettes and reference moments.
 - `src/animation/clock.ts`: pause, seek, hidden-tab suspension, duration clamp. Long frames advance at most 100 ms to avoid surprising jumps.
-- `src/animation/timeline.ts`: editable scene boundaries, continuous world root, introduction, reassembly and fade.
+- `src/animation/timeline.ts`: editable scene boundaries, continuous world root, introduction, reassembly and a persistent final gallery.
 - `src/animation/galleryLayout.ts`: shared 1280×720 coordinate system, strip pitch and final grid.
 - `src/animation/choreography.ts`: eight smooth foot-contact poses, reference phase anchors, and a separate hand/torso gesture track. Heel rise and whole-foot pickup are independent.
 - `src/animation/rig.ts`: measured body proportions, separate shoulder/hip joints and two-bone inverse kinematics. The bending plane is projected into 2D for foreshortening; projected bones never exceed their model lengths.
