@@ -37,4 +37,4 @@ Fast checks run on push to `master` and pull requests. Pages deployment depends 
 
 ## Audio
 
-`AudioSync` follows the visual clock using a local AAC file extracted from the supplied video without re-encoding. Playback is first enabled by a user gesture; deliberate mute persists across replay. Pause, seek and hidden-tab state are applied to both media and visuals. Drift greater than 180 ms during playback is corrected against the shared clock. Audio failures leave the visual gallery usable and show a retry message. The media element is paused on cleanup.
+`AudioSync` follows the visual clock using a local AAC file extracted from the supplied video without re-encoding. Sound is enabled by default. A blocked autoplay attempt waits for a click or key press without changing the sound preference or retrying every frame; deliberate mute persists across replay and later gestures. Pause, seek and hidden-tab state are applied to both media and visuals. Drift greater than 180 ms during playback is corrected against the shared clock. Audio failures leave the visual gallery usable and show a retry message. The media element is paused on cleanup.

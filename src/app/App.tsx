@@ -26,24 +26,35 @@ export function App() {
   const [hidden, setHidden] = useState(params.get("controls") === "0");
   const [error, setError] = useState("");
   const [ready, setReady] = useState(false);
-  const [soundOn, setSoundOn] = useState(false);
+  const [soundOn, setSoundOn] = useState(true);
   const [audioError, setAudioError] = useState("");
-  const soundPreference = useRef<"muted" | "enabled" | null>(null);
+  const soundPreference = useRef<"muted" | "enabled">("enabled");
   const audio = useRef<HTMLAudioElement>(null);
   const soundtrack = useRef<AudioSync | null>(null);
   useEffect(() => {
     if (!audio.current) return;
-    const sync = new AudioSync(audio.current, (message) => {
+    const sync = new AudioSync(audio.current, (message, blocked) => {
       setAudioError(message);
-      setSoundOn(false);
-      soundPreference.current = "muted";
+      if (!blocked) {
+        setSoundOn(false);
+        soundPreference.current = "muted";
+      }
     });
     soundtrack.current = sync;
+    const activate = (event: Event) => {
+      if (!event.isTrusted || soundPreference.current === "muted") return;
+      setAudioError("");
+      sync.setEnabled(true, clock.time, clock.playing && !document.hidden);
+    };
+    window.addEventListener("click", activate);
+    window.addEventListener("keydown", activate);
     return () => {
+      window.removeEventListener("click", activate);
+      window.removeEventListener("keydown", activate);
       sync.dispose();
       soundtrack.current = null;
     };
-  }, []);
+  }, [clock]);
   const startSound = () => {
     if (soundPreference.current !== "muted") {
       soundPreference.current = "enabled";

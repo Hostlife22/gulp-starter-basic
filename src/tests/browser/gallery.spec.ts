@@ -155,3 +155,72 @@ test("source audio starts on a gesture and follows pause, seek, mute and replay"
     await audio.evaluate((el) => (el as HTMLAudioElement).currentTime),
   ).toBeLessThan(2);
 });
+
+for (const policy of [
+  "no-user-gesture-required",
+  "document-user-activation-required",
+]) {
+  test(`sound defaults on with autoplay policy ${policy}`, async ({
+    playwright,
+  }) => {
+    const browser = await playwright.chromium.launch({
+      args: [`--autoplay-policy=${policy}`],
+    });
+    try {
+      const page = await browser.newPage();
+      if (policy === "document-user-activation-required") {
+        // Headless Chromium may bypass autoplay policy; enforce the rejection
+        // until a real trusted gesture, then use the browser's actual decoder.
+        await page.addInitScript(() => {
+          let activated = false;
+          window.addEventListener(
+            "click",
+            (event) => {
+              if (event.isTrusted) activated = true;
+            },
+            true,
+          );
+          const play = HTMLMediaElement.prototype.play;
+          HTMLMediaElement.prototype.play = function () {
+            if (!activated)
+              return Promise.reject(
+                new DOMException("Gesture required", "NotAllowedError"),
+              );
+            return play.call(this);
+          };
+        });
+      }
+      await page.goto("http://127.0.0.1:5173/moonwalk-art-gallery/");
+      await ready(page);
+      await expect(
+        page.getByRole("button", { name: "Mute sound" }),
+      ).toHaveAttribute("aria-pressed", "true");
+      const audio = page.locator("audio");
+      if (policy === "document-user-activation-required") {
+        await expect(page.locator(".media-note")).toContainText(
+          "Click or press a key",
+        );
+        expect(
+          await audio.evaluate((el) => (el as HTMLAudioElement).paused),
+        ).toBe(true);
+        await page.mouse.click(10, 10);
+      }
+      await expect
+        .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).paused))
+        .toBe(false);
+      expect(await audio.evaluate((el) => (el as HTMLAudioElement).muted)).toBe(
+        false,
+      );
+      await page.getByRole("button", { name: "Mute sound" }).click();
+      await page.mouse.click(10, 10);
+      expect(await audio.evaluate((el) => (el as HTMLAudioElement).muted)).toBe(
+        true,
+      );
+      expect(
+        await audio.evaluate((el) => (el as HTMLAudioElement).paused),
+      ).toBe(true);
+    } finally {
+      await browser.close();
+    }
+  });
+}

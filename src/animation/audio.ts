@@ -10,17 +10,19 @@ export interface AudioPort {
 }
 /** The visual clock remains authoritative, including seek and hidden-tab suspension. */
 export class AudioSync {
-  enabled = false;
+  enabled = true;
   private pending = false;
+  private blocked = false;
   private disposed = false;
   constructor(
     private media: AudioPort,
-    private onFailure: (message: string) => void,
+    private onFailure: (message: string, blocked: boolean) => void,
   ) {
-    media.muted = true;
+    media.muted = false;
   }
   setEnabled(enabled: boolean, time: number, playing: boolean) {
     this.enabled = enabled;
+    this.blocked = false;
     this.media.muted = !enabled;
     this.sync(time, playing);
   }
@@ -37,7 +39,7 @@ export class AudioSync {
       if (Math.abs(this.media.currentTime - target) > (active ? 0.18 : 0.02))
         this.media.currentTime = target;
     }
-    if (active && this.media.paused && !this.pending) {
+    if (active && this.media.paused && !this.pending && !this.blocked) {
       this.pending = true;
       this.media
         .play()
@@ -47,9 +49,23 @@ export class AudioSync {
             (error instanceof DOMException && error.name === "AbortError")
           )
             return;
+          if (
+            error instanceof DOMException &&
+            error.name === "NotAllowedError"
+          ) {
+            this.blocked = true;
+            this.onFailure(
+              "Sound is on. Click or press a key to start the music.",
+              true,
+            );
+            return;
+          }
           this.enabled = false;
           this.media.muted = true;
-          this.onFailure("Sound could not start. Press Sound to try again.");
+          this.onFailure(
+            "Sound could not start. Press Sound to try again.",
+            false,
+          );
         })
         .finally(() => {
           this.pending = false;

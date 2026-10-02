@@ -7,8 +7,8 @@ Date: 2 October 2026. Local environment: macOS x64, Intel Core i7-9750H @ 2.60 G
 | Check                        | Result                                                                                                                               |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `npm run check`              | Passed: Prettier, ESLint, strict TypeScript, unit tests, production build                                                            |
-| Vitest                       | 35 passing tests                                                                                                                     |
-| `npm run test:e2e`           | 6 passing browser scenarios, explicitly invoked                                                                                      |
+| Vitest                       | 36 passing tests                                                                                                                     |
+| `npm run test:e2e`           | 8 passing browser scenarios, explicitly invoked                                                                                      |
 | Real playback                | Recorded a complete showing; the slider reached 52.017 s without seek                                                                |
 | Reference frames             | Captured 49 moments: intro, twenty style controls, additional patch hold, six boundaries in three phases, reassembly, final and fade |
 | Final figures                | Separate pixel regions for all twenty figures changed between 48 and 50 s                                                            |
@@ -58,4 +58,6 @@ At the user’s explicit request, the original AAC audio stream was copied to `p
 173b01e98ddc442552ce25691c8775611c68b23ce3113734c7321ee77a58cb3d
 ```
 
-Four unit tests cover user activation, drift, pause/seek/mute/hidden-tab handling and a rejected media start. A browser scenario verifies actual audio playback, pause, seek to 31.7 seconds, persistent mute through Replay, and re-enabling at the current clock time. The visual recording produced by Playwright does not capture system audio; the deployed application does play it.
+Five unit tests cover default-on audio, blocked autoplay recovery, user activation, drift, pause/seek/mute/hidden-tab handling and a rejected media start. A browser scenario verifies actual audio playback, pause, seek to 31.7 seconds, persistent mute through Replay, and re-enabling at the current clock time. The visual recording produced by Playwright does not capture system audio; the deployed application does play it.
+
+Autoplay checks exercise both browser policies: permitted audible autoplay and blocked autoplay followed by a gesture. The blocked case injects a NotAllowedError until a trusted browser gesture because headless Chromium can bypass its autoplay policy; subsequent playback uses the actual audio decoder. Both checks verify that later gestures respect deliberate mute.
