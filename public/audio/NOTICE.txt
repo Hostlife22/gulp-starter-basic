@@ -1,0 +1,10 @@
+reference-soundtrack.m4a
+
+Audio extracted without re-encoding from the video supplied by the user:
+P-Qyt6vo6pxQ4r0H.mp4
+
+Included at the user's explicit request to preserve the video's music.
+AAC, stereo, 48000 Hz, 52.074667 seconds.
+The source audio's artist, mix and BPM have not been independently identified.
+The project's MIT license does not apply to this soundtrack.
+Copyright in the recording and composition remains with their respective owners.

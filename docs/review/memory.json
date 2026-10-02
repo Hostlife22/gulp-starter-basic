@@ -1,0 +1,29 @@
+{
+  "samples": [
+    {
+      "heapBytes": 2526992,
+      "documents": 2,
+      "nodes": 427,
+      "jsEventListeners": 240
+    },
+    {
+      "heapBytes": 3249060,
+      "documents": 2,
+      "nodes": 435,
+      "jsEventListeners": 213
+    },
+    {
+      "heapBytes": 3331724,
+      "documents": 2,
+      "nodes": 435,
+      "jsEventListeners": 213
+    },
+    {
+      "heapBytes": 3364360,
+      "documents": 2,
+      "nodes": 435,
+      "jsEventListeners": 213
+    }
+  ],
+  "note": "Three rounds of 40 seeks, 8 resizes and 5 replays; forced GC before each sample. Short-run JS heap and DOM counters, not GPU/process memory or proof of no leak."
+}

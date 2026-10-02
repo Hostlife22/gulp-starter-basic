@@ -1,0 +1,8 @@
+node_modules
+dist
+package-lock.json
+docs/reference
+PROMPT.md
+playwright-report
+test-results
+docs/review

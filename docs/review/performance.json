@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-02T16:17:49.085Z",
+  "host": {
+    "platform": "darwin",
+    "arch": "x64",
+    "cpu": "Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz"
+  },
+  "performanceData": {
+    "frames": 141,
+    "meanMs": 21.35815602836879,
+    "p95Ms": 33.40000000000009,
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+  },
+  "errors": []
+}
