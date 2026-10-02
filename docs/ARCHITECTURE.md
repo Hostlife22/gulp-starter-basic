@@ -13,7 +13,7 @@ React owns semantic UI and lifecycle. One requestAnimationFrame advances the clo
 - `src/animation/choreography.ts`: piecewise smooth key poses. Head, neck, torso, hip, elbows, hands, knees, ankles and toes share one phase.
 - `src/artworks/`: four era modules produce twenty independent SVG compositions. SVGs are decoded once into cached canvases; blob URLs are revoked. IDs are isolated in separate SVG documents.
 - `src/renderers/figure.ts`: common polygons, material outlines and a shared sampled mask for pecking, mosaic, cross-stitch, ASCII and pixels.
-- `src/renderers/gallery.ts`: visibility culling, card transforms, moving reveal masks, captions and hit regions.
+- `src/renderers/gallery.ts`: visibility culling, card transforms, material clipping masks, captions and hit regions.
 
 ## Coordinates and transitions
 

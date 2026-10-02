@@ -1,6 +1,6 @@
 import { artworks } from "../data/styles";
 import { cardAt, layout } from "../animation/galleryLayout";
-import { timelineAt, smooth, mix, cameraAt } from "../animation/timeline";
+import { timelineAt, mix, cameraAt } from "../animation/timeline";
 import { poseAt } from "../animation/choreography";
 import { drawVector, figureParts, FigureRaster } from "./figure";
 export interface HitBox {
@@ -61,28 +61,6 @@ export class GalleryRenderer {
       );
       ctx.shadowBlur = 0;
       ctx.shadowOffsetY = 0;
-      // Next artwork grows left-to-right over the previous material.
-      if (state.grid < 0.01 && index === state.index + 1) {
-        const start = artworks[state.index].time - 0.4;
-        const reveal = smooth((time - start) / 1.1);
-        ctx.save();
-        ctx.beginPath();
-        ctx.rect(
-          card.x + card.size * reveal,
-          card.y,
-          card.size * (1 - reveal),
-          card.size,
-        );
-        ctx.clip();
-        ctx.drawImage(
-          this.backgrounds[index - 1],
-          card.x,
-          card.y,
-          card.size,
-          card.size,
-        );
-        ctx.restore();
-      }
       ctx.strokeStyle = "rgba(68,54,36,.16)";
       ctx.lineWidth = 0.7;
       ctx.strokeRect(card.x, card.y, card.size, card.size);

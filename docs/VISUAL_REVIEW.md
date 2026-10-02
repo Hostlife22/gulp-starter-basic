@@ -2,6 +2,10 @@
 
 Reviewed on 2 October 2026 against the provided 1280×720 video and its local contact sheets. This is a working procedural interpretation. **It is not a frame-exact copy, and the prompt's strict visual fidelity criterion is not yet satisfied.**
 
+## Incoming-card correction
+
+Removed the overlay that copied the previous background onto each incoming card before revealing its own art. All nineteen transitions now show the incoming card’s own background immediately. [Updated transition screenshot](review/incoming-card-fixed.png). The comparison sheets and playback recording below predate this correction.
+
 ## Evidence
 
 Reference is on the left; implementation is on the right:
@@ -22,7 +26,7 @@ Full-resolution local captures are in `docs/review/raw/` (excluded from Git). Th
 
 The desktop title and 5×4 grid use the reference's coordinate proportions. The large strip uses 535-unit squares at y=61 with a 45-unit gutter. All twenty named works are present in order and have individual compositions. The same articulated pose is rendered as stone dots, mosaic pieces, glass, outlines, cross-stitches, neon tubes, ASCII glyphs, pixels, shaded polygons and embroidery.
 
-The root moves independently of the camera. At material boundaries a single figure straddles the gutter and changes material at the next frame. The following background is revealed from left to right. Each card moves into the final grid, where all twenty figures change pose together. Recorded playback reaches the final fade through the real clock.
+The root moves independently of the camera. At material boundaries a single figure straddles the gutter and changes material at the next frame. Each incoming card displays its own background from the moment it enters the viewport. Each card moves into the final grid, where all twenty figures change pose together. Recorded playback reaches the final fade through the real clock.
 
 ## Remaining differences
 

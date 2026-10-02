@@ -1,0 +1,49 @@
+{
+  "audioPlayback": {
+    "time": 48.208893,
+    "duration": 52.074667,
+    "paused": false,
+    "muted": false
+  },
+  "mediaRangeCancellations": [
+    "https://hostlife22.github.io/moonwalk-art-gallery/audio/reference-soundtrack.m4a"
+  ],
+  "date": "2026-10-02T16:29:09.118Z",
+  "url": "https://hostlife22.github.io/moonwalk-art-gallery/",
+  "status": 200,
+  "title": "The King of Pop — Twenty Styles, One Moonwalk",
+  "fontStatus": "loaded",
+  "assets": [
+    {
+      "url": "https://hostlife22.github.io/moonwalk-art-gallery/assets/index-D-_CS8lh.css",
+      "status": 200
+    },
+    {
+      "url": "https://hostlife22.github.io/moonwalk-art-gallery/assets/index-B_0FTOQQ.js",
+      "status": 200
+    },
+    {
+      "url": "https://hostlife22.github.io/moonwalk-art-gallery/assets/cormorant-garamond-latin-400-normal-B-1hWBU7.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://hostlife22.github.io/moonwalk-art-gallery/assets/libre-baskerville-latin-400-normal-C42RasBZ.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://hostlife22.github.io/moonwalk-art-gallery/assets/cormorant-garamond-latin-400-italic-Dc_OZ8oc.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://hostlife22.github.io/moonwalk-art-gallery/audio/reference-soundtrack.m4a",
+      "status": 206
+    },
+    {
+      "url": "https://hostlife22.github.io/moonwalk-art-gallery/audio/reference-soundtrack.m4a",
+      "status": 206
+    }
+  ],
+  "errors": [],
+  "badResponses": [],
+  "external": []
+}

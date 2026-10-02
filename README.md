@@ -4,6 +4,8 @@
 
 An animated gallery tracing one moonwalk through twenty art styles, from ancient petroglyphs to embroidered patches. The gallery draws its posters and dancer locally using SVG and Canvas 2D. It does not play the reference video or use its frames as backgrounds.
 
+[Open the gallery](https://hostlife22.github.io/moonwalk-art-gallery/) · [View the source](https://github.com/Hostlife22/moonwalk-art-gallery)
+
 ![Gallery preview](docs/review/overview-50.png)
 
 ## Run

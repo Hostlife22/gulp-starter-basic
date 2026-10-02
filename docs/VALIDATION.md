@@ -7,7 +7,7 @@ Date: 2 October 2026. Local environment: macOS x64, Intel Core i7-9750H @ 2.60 G
 | Check                        | Result                                                                                                                               |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `npm run check`              | Passed: Prettier, ESLint, strict TypeScript, unit tests, production build                                                            |
-| Vitest                       | 16 passing tests                                                                                                                     |
+| Vitest                       | 35 passing tests                                                                                                                     |
 | `npm run test:e2e`           | 6 passing browser scenarios, explicitly invoked                                                                                      |
 | Real playback                | Recorded a complete showing; the slider reached 52.017 s without seek                                                                |
 | Reference frames             | Captured 49 moments: intro, twenty style controls, additional patch hold, six boundaries in three phases, reassembly, final and fade |
@@ -17,6 +17,8 @@ Date: 2 October 2026. Local environment: macOS x64, Intel Core i7-9750H @ 2.60 G
 | Canvas failure               | Visible error and usable text catalogue verified with Canvas 2D unavailable                                                          |
 | Browser errors during review | None recorded                                                                                                                        |
 | Audio                        | Original AAC extracted; source PCM hash matched                                                                                      |
+
+Nineteen renderer regression cases sample every incoming-card transition at 0.1-second intervals and verify that each visible card paints only its own background.
 
 Unit tests cover unique ordered artwork IDs, deterministic valid SVGs, finite poses, articulation changes, continuous root travel, gutter traversal, final grid coordinates, fade, pause/resume, seek/replay, hidden tabs and end-of-playback stopping.
 
@@ -44,7 +46,9 @@ Vite builds a static `/moonwalk-art-gallery/` site. JavaScript is approximately 
 
 The [manually dispatched Linux browser workflow](https://github.com/Hostlife22/moonwalk-art-gallery/actions/runs/37033301813) passed all six scenarios, including AAC playback.
 
-The actual default branch is `master`. GitHub Pages has been configured for an Actions build. Deployment and public URL checks are recorded here after the first successful publication.
+The actual default branch is `master`. The repository was renamed to `Hostlife22/moonwalk-art-gallery`; remote, Pages base, package metadata, test URLs and documentation were updated together.
+
+[GitHub Pages](https://hostlife22.github.io/moonwalk-art-gallery/) is live. The [deployment after the rename](https://github.com/Hostlife22/moonwalk-art-gallery/actions/runs/37033969433) passed. A browser opened the public site, confirmed HTTP 200, loaded all three local WOFF2 fonts, and played the local AAC at the current clock time. There were no HTTP errors or external requests. The browser cancelled one initial audio range request when seeking, then successfully loaded the requested range with HTTP 206; this is recorded separately from failures. [Deployment evidence](review/deployment.json).
 
 ## Soundtrack verification
 
