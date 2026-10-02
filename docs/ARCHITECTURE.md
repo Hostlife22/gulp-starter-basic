@@ -1,41 +1,87 @@
 # Architecture
 
-## Data flow
+## Responsibilities
 
-`Clock → timelineAt + poseAt → GalleryRenderer → material renderers`
+```mermaid
+flowchart TD
+  App --> Controls[PlaybackControls and ArtworkCatalogue]
+  App --> Hooks[usePlayback and useGalleryShortcuts]
+  App --> Stage[GalleryStage]
+  Controls --> Playback[PlaybackController]
+  Hooks --> Playback
+  Playback --> Clock
+  Playback --> AudioSync
+  Stage --> Runtime[GalleryRuntime]
+  Runtime --> Playback
+  Runtime --> Renderer[GalleryRenderer]
+  Renderer --> Pose[poseAt and rig]
+  Renderer --> Backgrounds[Cached artwork backgrounds]
+  Renderer --> Geometry[Figure geometry]
+  Geometry --> Materials[Vector and raster renderers]
+```
 
-React owns semantic UI and lifecycle. One requestAnimationFrame advances the clock; React receives a throttled time snapshot for controls. The renderer updates the canvas and title opacity without React state for individual joints or cards.
+`App.tsx` composes the page. It owns presentation preferences such as hidden controls and reads URL/reduced-motion options once. It does not implement an animation loop, audio state transitions, or canvas drawing.
 
-- `src/data/styles.ts`: the twenty typed artwork definitions, captions, palettes and reference moments.
-- `src/animation/clock.ts`: pause, seek, hidden-tab suspension, duration clamp. Long frames advance at most 100 ms to avoid surprising jumps.
-- `src/animation/timeline.ts`: editable scene boundaries, continuous world root, introduction, reassembly and a persistent final gallery.
-- `src/animation/galleryLayout.ts`: shared 1280×720 coordinate system, strip pitch and final grid.
-- `src/animation/choreography.ts`: eight smooth foot-contact poses, reference phase anchors, and a separate hand/torso gesture track. Heel rise and whole-foot pickup are independent.
-- `src/animation/rig.ts`: measured body proportions, separate shoulder/hip joints and two-bone inverse kinematics. The bending plane is projected into 2D for foreshortening; projected bones never exceed their model lengths.
-- `src/artworks/`: four era modules produce twenty independent SVG compositions. SVGs are decoded once into cached canvases; blob URLs are revoked. IDs are isolated in separate SVG documents.
-- `src/renderers/figure.ts`: rounded articulated contours, curls, fedora, cuffs, shoes, costume details, material outlines and a shared sampled mask for pecking, mosaic, cross-stitch, ASCII and pixels.
-- `src/renderers/gallery.ts`: visibility culling, card transforms, material clipping masks, captions and hit regions.
+### Playback
 
-## Coordinates and transitions
+- `playback/PlaybackController.ts` is the shared command layer for buttons, keyboard and artwork selection. It owns `Clock`, the audio connection, and the sound preference. It has no React or DOM dependency.
+- `animation/clock.ts` handles time, pause, seek, hidden tabs and duration clamping. Long frames advance at most 100 ms.
+- `animation/audio.ts` synchronizes the original local AAC stream to the visual clock. It handles drift, rejected playback and disposal.
+- `hooks/usePlayback.ts` connects the controller to the media element and trusted browser gestures. React subscribes with `useSyncExternalStore`; unchanged snapshots keep their identity. Clock notifications are throttled to 80 ms; user commands notify immediately.
+- `hooks/useGalleryShortcuts.ts` dispatches the same controller commands as the buttons. There is no separate keyboard implementation of play/pause.
 
-The strip is measured in poster units: a 535-square work and a 580-unit pitch. The root moves in strip world coordinates, separately from camera position. Figure material is clipped to each poster's interval including its right gutter; the adjacent interval begins where the next frame starts. This avoids duplicate opaque figures and preserves the part crossing the gap.
+Sound has four explicit states: `on`, `off`, `blocked`, `error`. A blocked autoplay attempt keeps the user's preference enabled and the control says **Sound start**. One press retries; the media's `playing` event changes the control to **Sound on**. A deliberate mute survives replay and audio reconnection. Playback failures leave the visual gallery usable.
 
-Each poster displays its own background immediately when it enters the viewport. Each card interpolates independently to its final grid position. Other figures fade in during reassembly; the active figure remains visible.
+The controller's audio connection returns a cleanup function. Disposed media promises cannot change the current state. Browser event handlers are registered and removed by their owning React hook.
 
-## Rendering and resources
+### Canvas lifecycle
 
-All content is local. SVG backgrounds use deterministic seeded details. A shared small canvas samples the pose's material regions once per frame; all discrete renderers use this raster. There is no WebGL, video element, worker, API, or external image. Canvas allocations for static backgrounds happen during loading. The browser's `getImageData` still allocates a small readback buffer each frame; this is a known optimisation opportunity.
+`components/GalleryStage.tsx` owns the canvas, stage and title elements and displays loading/error states. It creates one `gallery/GalleryRuntime.ts` instance per mount.
 
-DPR is limited to two. Hidden large posters are culled. The canvas, observer and visibility handlers are cleaned up on unmount. Paused scenes redraw only on seek or resize. Font loading is awaited, with system fallbacks provided by CSS. Resource errors retain the catalogue and display a message.
+The runtime owns the single requestAnimationFrame, ResizeObserver, visibility listener and background loading. Each frame advances the controller, reads the timeline and draws only when the time or dimensions change. The runtime also converts canvas clicks into artwork indices. Disposal cancels its RAF, disconnects its observer, removes its listener and ignores unfinished resource loads. This supports React StrictMode's setup/cleanup/setup sequence.
 
-## Reproducibility
+Fonts and artwork SVGs are loaded before the loop starts. Canvas 2D failure shows an error while preserving the separate accessible artwork catalogue.
 
-`?time=…&seed=…&controls=0` starts a paused reference view. Time and seed fully determine rendered content; fonts and browser rasterisation can still change pixels. Tests use this normal presentation feature instead of production-only debug globals.
+### Layout and animation
 
-## CI
+- `data/styles.ts`: twenty ordered artwork definitions, captions, palettes and reference moments.
+- `animation/timeline.ts`: scene boundaries, continuous world root, introduction, reassembly and persistent final gallery.
+- `animation/galleryLayout.ts`: 1280×720 composition, 535-unit posters, 580-unit pitch and grid coordinates.
+- `data/choreography.ts`: editable foot-contact poses, phase anchors and named hand/torso gesture fields.
+- `animation/choreography.ts`: interpolation and pose construction. Lookup times are prepared once, rather than allocated on every frame.
+- `animation/rig.ts`: body proportions, separate shoulder/hip joints and two-bone inverse kinematics with projected bending planes.
 
-Fast checks run on push to `master` and pull requests. Pages deployment depends on those checks. Browser tests are a separate, manually dispatched workflow; no E2E is triggered by a push, pull request, or deployment.
+The world root and camera move independently. Each material clips the dancer to its poster interval, including the following gutter. Every incoming card immediately displays its own background. Each card moves independently into the final grid. At 52.017 seconds, music and movement stop while the complete gallery remains visible.
 
-## Audio
+### Figure rendering
 
-`AudioSync` follows the visual clock using a local AAC file extracted from the supplied video without re-encoding. Sound is enabled by default. A blocked autoplay attempt waits for a click or key press without changing the sound preference or retrying every frame; deliberate mute persists across replay and later gestures. Pause, seek and hidden-tab state are applied to both media and visuals. Drift greater than 180 ms during playback is corrected against the shared clock. Audio failures leave the visual gallery usable and show a retry message. The media element is paused on cleanup.
+`renderers/figure.ts` is the small public entry point for the figure renderers:
+
+- `figure/paths.ts`: shared contour and path primitives.
+- `figure/geometry.ts`: pose-to-contour conversion, clothing, hair, hat, hands and shoes.
+- `figure/vector.ts`: colors, outlines, neon, embroidery and faceted shading.
+- `figure/raster.ts`: a shared material mask sampled by stone dots, mosaic, cross-stitch, ASCII and pixel styles.
+
+`renderers/gallery.ts` handles card visibility, transforms, material clipping, captions and hit regions. Artwork backgrounds are generated by the four era modules in `artworks/`, decoded once into cached canvases, and reused. Blob URLs are revoked after decoding.
+
+## Resource limits
+
+All runtime content is local. There is no WebGL, video element, worker, API or external image. DPR is capped at two, offscreen large cards are culled, and paused scenes redraw only after seek or resize. Canvas readback still allocates a small material buffer per frame; that remains a known optimization opportunity.
+
+## Verification
+
+`?time=…&seed=…&controls=0` provides a deterministic paused view. Time and seed determine the drawing; fonts and browser rasterization can still change pixels between environments.
+
+The refactor was checked against 29 canvas/title snapshots from the preceding commit: all twenty styles, introduction, reassembly, final hold and mobile views. All hashes matched. Controller tests cover command notifications, mute/replay/reconnection, blocked autoplay, hidden tabs, the final stop and late media failures. Browser scenarios cover the complete UI integration. See [validation](VALIDATION.md) and [visual comparison results](review/refactor.json).
+
+Fast checks run on push/PR; Pages deploys successful `master` builds. Browser tests remain an explicitly invoked, manual workflow and do not run as part of deployment.
+
+To compare a future refactor, run the dev server and capture a baseline before editing:
+
+```sh
+node scripts/compare-frames.mjs capture /tmp/gallery-before.json
+# Apply changes, then compare using the same browser and machine:
+node scripts/compare-frames.mjs compare /tmp/gallery-before.json
+```
+
+`GALLERY_BASE_URL` can select a different dev or preview server. Comparison does not update the baseline and exits with failure when frames differ or the page reports an error.

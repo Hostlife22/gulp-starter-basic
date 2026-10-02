@@ -1,18 +1,6 @@
 import { it, expect, vi } from "vitest";
-import { AudioSync, type AudioPort } from "../animation/audio";
-class Media implements AudioPort {
-  currentTime = 0;
-  duration = 52.074667;
-  readyState = 4;
-  paused = true;
-  muted = true;
-  play = vi.fn(async () => {
-    this.paused = false;
-  });
-  pause = vi.fn(() => {
-    this.paused = true;
-  });
-}
+import { AudioSync } from "../animation/audio";
+import { Media } from "./helpers/Media";
 it("enables sound by default and seeks before playback", () => {
   const media = new Media();
   const audio = new AudioSync(media, vi.fn());

@@ -1,0 +1,154 @@
+{
+  "date": "2026-10-02T17:30:14.231385+00:00",
+  "baselineCommit": "c98a595d120a32fab1fb2c60f6bcfbcd56e58910",
+  "comparison": "SHA-256 of canvas data URL and title opacity, same Chromium and viewport before/after",
+  "framesCompared": 29,
+  "changedFrames": 0,
+  "frames": [
+    {
+      "width": 1280,
+      "time": 1,
+      "hash": "596ab2f1d34590057b104bd7b66388c38564ef91fd3ed2ccf43bb2cf0c89f49e"
+    },
+    {
+      "width": 1280,
+      "time": 3.7,
+      "hash": "d32a8fd9b71f617ae1793ef4d272df2b3d42754639d674c7d95837b1019ae7d4"
+    },
+    {
+      "width": 1280,
+      "time": 5,
+      "hash": "66b55950676b0d287f13d3e954d20dc6d79d7c7e70820c8a3e9167c832993cff"
+    },
+    {
+      "width": 1280,
+      "time": 7.1,
+      "hash": "8d775662f7fcf45ed3e92b2b8367da0a4c8313e76ed457202b9d438dd46c1ddb"
+    },
+    {
+      "width": 1280,
+      "time": 9.15,
+      "hash": "d5ac15e22d7994083785e80376a13b5548264bf76e90cf859f1f183de84e3b20"
+    },
+    {
+      "width": 1280,
+      "time": 11.2,
+      "hash": "15c11f9cac7058e11ff0beea1056277479527ac228179e12cb9bd99149f1b8da"
+    },
+    {
+      "width": 1280,
+      "time": 13.25,
+      "hash": "96021a13f879d31a8d2c13bd2fe8fbd0a370612aef56e6473ffdbf8481723337"
+    },
+    {
+      "width": 1280,
+      "time": 15.3,
+      "hash": "d45d462784326fef6fd4427edf8522e06824582ea796575d8f959641e7f321c9"
+    },
+    {
+      "width": 1280,
+      "time": 17.35,
+      "hash": "d2596f8a4beccf837e48fb54f56b12758ed00f048a5f5a2b7a73a4ad31c1e2b6"
+    },
+    {
+      "width": 1280,
+      "time": 19.4,
+      "hash": "8cc65fd2cdba056f2e367e1ab1745d105e0214c31b4b1bba1f1c4d831dcdb7d9"
+    },
+    {
+      "width": 1280,
+      "time": 21.45,
+      "hash": "1a891eb7097e83cac8d8c247ec9c1a7a40676058da0a4f11908b36ec95334bf1"
+    },
+    {
+      "width": 1280,
+      "time": 23.5,
+      "hash": "a9ded51b5470353a4b1a57ffc9def73ad865fd2a68c3117d36ee200851e38374"
+    },
+    {
+      "width": 1280,
+      "time": 25.55,
+      "hash": "47660ec56b96494cc09aaa248cf306c9c3f2c3ffc34a2b2f5a8ff745fe6ae19b"
+    },
+    {
+      "width": 1280,
+      "time": 27.6,
+      "hash": "7ae86858f61518ffb53dd170df4706d190e98646d18aebdb3c033f71a8c6db10"
+    },
+    {
+      "width": 1280,
+      "time": 29.65,
+      "hash": "03b4447424aff927684a9351c50d6b29187f525a384d17f61dde1ff6f6622c95"
+    },
+    {
+      "width": 1280,
+      "time": 31.7,
+      "hash": "519a8a63984569a8c5c9a174baca4f89585b61801b849f0f6c88f4a7f75a7896"
+    },
+    {
+      "width": 1280,
+      "time": 33.75,
+      "hash": "ba4e3a91a781a25e390c8a52e2821ab1378a76dbb437226150238984b2caf3ee"
+    },
+    {
+      "width": 1280,
+      "time": 35.8,
+      "hash": "64b76c5544ec2196009e33199fd83c0d61ea5ded8c5a11cea9fe1afead2559b4"
+    },
+    {
+      "width": 1280,
+      "time": 37.85,
+      "hash": "9c8fdc8ff1241a76b19b71dd76e1de82e8b9fc9e07d09232df057ee65a0eed0d"
+    },
+    {
+      "width": 1280,
+      "time": 39.9,
+      "hash": "92934bf96db5a64c9c36ad3cb22857b52b9b2e0ad7e6642c1c69a8080aba938c"
+    },
+    {
+      "width": 1280,
+      "time": 41.95,
+      "hash": "78416aa8e5d492c9842b7b8b599c9e527803341e1f1d0f4f1112fe236a7d8ab7"
+    },
+    {
+      "width": 1280,
+      "time": 44,
+      "hash": "10a2dab7913b1ea20a7fa1a79557c6c8cb83f2b4c14aa25476802714bae63750"
+    },
+    {
+      "width": 1280,
+      "time": 46.4,
+      "hash": "f49bff49ecce66f87c2444c4056dce37c1ecc6d37a410413f4a84c046571242d"
+    },
+    {
+      "width": 1280,
+      "time": 48,
+      "hash": "5d1e37517787c0adece51971380ee69885b645b2602d76fee75be9912e649738"
+    },
+    {
+      "width": 1280,
+      "time": 52.017,
+      "hash": "e12b3857eb66a713473fe9ee0448df4dd27ad743c4288fa3d92dbb47c06acdc0"
+    },
+    {
+      "width": 390,
+      "time": 5,
+      "hash": "f933d900ee0ba4e43b47a5f6c11f1cefa44ea304fb9b7985212234e3726054a5"
+    },
+    {
+      "width": 390,
+      "time": 44,
+      "hash": "ef60800fe33de13b434357bc1e83c59ea6fea370aa4ab239c4cae46c8c5f4299"
+    },
+    {
+      "width": 390,
+      "time": 48,
+      "hash": "42298eefe34f887280292ab547f0dd6f33aa9d3fbe8d759ea9ce62ce4e4723b1"
+    },
+    {
+      "width": 390,
+      "time": 52.017,
+      "hash": "ec3a9dc8eceeb7d80beb919f56eac0b02524718eed0f1d2317a45c475797b119"
+    }
+  ]
+}

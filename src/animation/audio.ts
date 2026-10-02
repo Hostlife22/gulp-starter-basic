@@ -1,4 +1,4 @@
-import { clamp } from "./timeline";
+import { clamp, DURATION } from "./timeline";
 export interface AudioPort {
   currentTime: number;
   duration: number;
@@ -34,7 +34,7 @@ export class AudioSync {
       const target = clamp(
         time,
         0,
-        Number.isFinite(this.media.duration) ? this.media.duration : 52.017,
+        Number.isFinite(this.media.duration) ? this.media.duration : DURATION,
       );
       if (Math.abs(this.media.currentTime - target) > (active ? 0.18 : 0.02))
         this.media.currentTime = target;

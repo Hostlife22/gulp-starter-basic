@@ -1,12 +1,12 @@
 import { DURATION } from "../animation/timeline";
+import type { SoundState } from "../playback/PlaybackController";
 import { artworks } from "../data/styles";
 interface Props {
   time: number;
   playing: boolean;
   hidden: boolean;
   active: number;
-  soundOn: boolean;
-  soundBlocked: boolean;
+  sound: SoundState;
   onSound: () => void;
   onToggle: () => void;
   onSeek: (time: number) => void;
@@ -45,15 +45,16 @@ export function PlaybackControls(p: Props) {
           <button
             onClick={p.onSound}
             aria-label={
-              p.soundBlocked
+              p.sound === "blocked"
                 ? "Start sound"
-                : p.soundOn
+                : p.sound === "on"
                   ? "Mute sound"
                   : "Enable sound"
             }
-            aria-pressed={p.soundOn && !p.soundBlocked}
+            aria-pressed={p.sound === "on"}
           >
-            Sound {p.soundBlocked ? "start" : p.soundOn ? "on" : "off"}
+            Sound{" "}
+            {p.sound === "blocked" ? "start" : p.sound === "on" ? "on" : "off"}
           </button>
           <span className="current-work">
             {String(p.active + 1).padStart(2, "0")} / 20{" "}

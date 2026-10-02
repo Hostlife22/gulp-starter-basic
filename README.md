@@ -76,7 +76,7 @@ The **Check and publish** workflow verifies `master` and PRs; successful checks 
 
 ## Implementation and review
 
-One clock drives the gallery, masks and shared articulated dancer. Artwork metadata, choreography, layout, background SVG generators and figure renderers are separate modules. Static posters are cached; only visible large works are rendered. LOW POLY uses two-dimensional polygon shading and needs no WebGL.
+A shared playback controller handles UI and keyboard commands, the clock and sound preference. A separate canvas runtime owns rendering and resource cleanup. Artwork metadata, motion data, pose solving, geometry and material renderers are separate modules. Static posters are cached; only visible large works are rendered. LOW POLY uses two-dimensional polygon shading and needs no WebGL.
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Validation evidence](docs/VALIDATION.md)

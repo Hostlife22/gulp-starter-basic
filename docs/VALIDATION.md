@@ -7,7 +7,7 @@ Date: 2 October 2026. Local environment: macOS x64, Intel Core i7-9750H @ 2.60 G
 | Check                        | Result                                                                                                                               |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `npm run check`              | Passed: Prettier, ESLint, strict TypeScript, unit tests, production build                                                            |
-| Vitest                       | 38 passing tests                                                                                                                     |
+| Vitest                       | 43 passing tests                                                                                                                     |
 | `npm run test:e2e`           | 8 passing browser scenarios, explicitly invoked                                                                                      |
 | Real playback                | Recorded a complete showing; the slider reached 52.017 s without seek                                                                |
 | Reference frames             | Captured 49 moments: intro, twenty style controls, additional patch hold, six boundaries in three phases, reassembly, final and fade |
@@ -40,7 +40,7 @@ A separate CDP check exercises repeated seeks, viewport changes and replay, coll
 
 ## Production output
 
-Vite builds a static `/moonwalk-art-gallery/` site. JavaScript is approximately 258 kB before gzip, 85 kB compressed; CSS is approximately 6 kB. Fonts and licenses are local. Source MP4s, reference images and review artifacts are outside `public` and are not included in `dist`. No API or runtime CDN is used.
+Vite builds a static `/moonwalk-art-gallery/` site. JavaScript is approximately 262 kB before gzip, 86 kB compressed; CSS is approximately 6 kB. Fonts and licenses are local. Source MP4s, reference images and review artifacts are outside `public` and are not included in `dist`. No API or runtime CDN is used.
 
 ## Publication
 
@@ -67,3 +67,7 @@ The blocked-autoplay scenario also reloads the page and verifies that the contro
 The dancer revision was checked across the full timeline at 60 samples per second for projected bone lengths and floor contact, plus dense continuity checks for hands, knees, ankles and head. All twenty reference captures and the complete playback recording were regenerated.
 
 Final-screen regression: the browser plays from 51.8 seconds through the real clock’s stop at 52.017, verifies opaque artwork pixels in all twenty cards, a visible title, paused audio and an unchanged final image, then verifies Replay. The final hold supersedes the fade in the older full-playback recording.
+
+## Refactor verification
+
+The app was decomposed into a playback controller, React adapters, canvas runtime, presentation components, motion data and figure renderers. All 29 before/after canvas-and-title hashes matched in the same local Chromium environment, including every style and four phone views. [Recorded comparison results](review/refactor.json). All eight browser scenarios passed after the refactor, including the final hold and blocked-autoplay reload. Five controller tests were added for notifications, media reconnection, mute/replay, blocked playback, hidden tabs, end-of-playback and late asynchronous failures.
